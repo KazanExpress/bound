@@ -1,0 +1,48 @@
+{
+  // "extends": [
+  //   "tslint-config-standard",
+  //   "tslint-config-prettier"
+  // ]
+  "rules": {
+    "adjacent-overload-signatures": true,
+    "arrow-return-shorthand": { "severity": "warning" },
+    "class-name": true,
+    "interface-name": { "severity": "error" },
+    "semicolon": true,
+    "deprecation": true,
+    "indent": { "options": "spaces" },
+    "member-access": true,
+    "newline-before-return": true,
+    // "newline-per-chained-call": true,
+    "no-conditional-assignment": true,
+    "no-construct": true,
+    "no-duplicate-super": true,
+    "no-eval": true,
+    "no-floating-promises": { "severity": "warning" },
+    // "no-implicit-dependencies": true,
+    "no-invalid-template-strings": true,
+    "no-magic-numbers": true,
+    "no-parameter-reassignment": true, // See https://eslint.org/docs/rules/no-param-reassign
+    "no-redundant-jsdoc": true,
+    "no-return-await": true,
+    "no-string-literal": true,
+    "no-string-throw": true,
+    "no-trailing-whitespace": true,
+    "no-unbound-method": { "severity": "warning" },
+    "no-unnecessary-callback-wrapper": { "severity": "warning" },
+    "no-unsafe-finally": true,
+    "no-var-requires": true,
+    "number-literal-format": true,
+    "prefer-function-over-method": { "severity": "warning" },
+    "prefer-object-spread": true,
+    "prefer-template": true,
+    "promise-function-async": true,
+    "quotemark": { "options": "single" },
+    "return-undefined": true,
+    "space-before-function-paren": [true, { "anonymous": "always", "named": "never", "asyncArrow": "always" }],
+    "switch-default": true,
+    "type-literal-delimiter": true,
+    "use-default-type-parameter": { "severity": "warning" },
+    "use-isnan": true
+  }
+}
