@@ -4,9 +4,10 @@ export interface IElementBindingSource extends IBindingSource<HTMLElement> {
   event?: keyof WindowEventMap;
 }
 
-export class ElementBinding<T = any> extends Binding<T> {
+export default class ElementBinding<T = any> extends Binding<T> {
   public bindings: IElementBindingSource[] = [];
 
+  // TODO: something needs to be done about this (hint: remove ts-ignore to see)
   // @ts-ignore - because IDK how to resolve such a stupid error
   public addBinding<B extends HTMLElement = HTMLElement>(
     obj: B,

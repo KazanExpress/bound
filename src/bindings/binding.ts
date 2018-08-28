@@ -54,7 +54,11 @@ export default class Binding<T = any> {
 
   public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
   public addMasterBinding(obj: any, prop: string | number) {
-    this.set(obj[prop] as any);
+    if (obj[prop]) {
+      this.set(obj[prop] as any);
+    } else {
+      obj[prop] = this.get();
+    }
 
     const binding = this.bind({ obj, prop, role: 'master' });
 

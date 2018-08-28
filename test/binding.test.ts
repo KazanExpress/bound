@@ -2,14 +2,23 @@ import mockConsole from 'jest-mock-console';
 
 import { Binding } from '@/bindings';
 
-describe('Binding', () => {
-  let restoreConsole;
+const doubleBind = () => {
+  const obj1 = {
+    test: 'foo'
+  };
 
-  beforeAll(() => (restoreConsole = mockConsole('info')));
+  const binding = new Binding<string>(false, 'foo');
 
-  afterAll(restoreConsole);
+  binding.addBinding(obj1, 'test');
+  binding.addBinding(obj1, 'test');
 
-  it('binds simple objects one-way', () => {
+  expect(binding.bindings.length).toBe(1);
+
+  return binding;
+};
+
+export const bindingTests = {
+  'binds simple objects one-way': () => {
     const obj1 = {
       test: 'foo'
     };
@@ -22,9 +31,9 @@ describe('Binding', () => {
     binding.set('bar');
 
     expect(obj1.test).toBe('bar');
-  });
+  },
 
-  it('assigns fresh values', () => {
+  'assigns fresh values': () => {
     const obj1 = {
       test: 'bar'
     };
@@ -48,9 +57,9 @@ describe('Binding', () => {
     bound.test = 'bar';
 
     expect(obj1.test).toBe('bar');
-  });
+  },
 
-  it('handles multiple bindings', () => {
+  'handles multiple bindings': () => {
     const obj1 = {
       test: 'foo'
     };
@@ -82,36 +91,21 @@ describe('Binding', () => {
 
     expect(obj1.test).toBe('bar');
     expect(obj2.test).toBe('bar');
-  });
+  },
 
-  const doubleBind = () => {
-    const obj1 = {
-      test: 'foo'
-    };
-
-    const binding = new Binding<string>(false, 'foo');
-
-    binding.addBinding(obj1, 'test');
-    binding.addBinding(obj1, 'test');
-
-    expect(binding.bindings.length).toBe(1);
-
-    return binding;
-  };
-
-  it('refuses to bind twice', () => {
+  'refuses to bind twice': () => {
     doubleBind();
-  });
+  },
 
-  it('refuses to bind twice with debug', () => {
+  'refuses to bind twice with debug': () => {
     Binding.config.debug = true;
 
     doubleBind();
 
     Binding.config.debug = false;
-  });
+  },
 
-  it('gets last binding', () => {
+  'gets last binding': () => {
     const obj1 = {
       test: 'foo'
     };
@@ -131,9 +125,9 @@ describe('Binding', () => {
 
     expect(binding.bindings.length).toBe(amount);
     expect(binding.lastBinding).toEqual(binding.bindings[binding.bindings.length - 1]);
-  });
+  },
 
-  it('removes bindings correctly', () => {
+  'removes bindings correctly': () => {
     const obj1 = {
       test: 'foo'
     };
@@ -171,9 +165,9 @@ describe('Binding', () => {
 
     expect(obj1.test).toBe('foo');
     expect(obj2.test).toBe('bar');
-  });
+  },
 
-  it('gets two-way binding right', () => {
+  'gets two-way binding right': () => {
     const obj1 = {
       test: 'foo'
     };
@@ -202,9 +196,21 @@ describe('Binding', () => {
 
     expect(binding.get()).toBe('bar');
     expect(obj2.test).toBe('bar');
-  });
+  },
 
-  it('clears bindings', () => {
+  'clears bindings': () => {
     expect(doubleBind().clearBindings().bindings.length).toBe(0);
-  });
+  },
+};
+
+describe('Binding', () => {
+  let restoreConsole;
+
+  beforeAll(() => (restoreConsole = mockConsole('info')));
+
+  afterAll(restoreConsole);
+
+  for (const name in bindingTests) {
+    it(name, bindingTests[name]);
+  }
 });
