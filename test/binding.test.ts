@@ -93,7 +93,7 @@ export const bindingTests = {
     expect(obj2.test).toBe('bar');
   },
 
-  'refuses to bind twice': doubleBind,
+  'refuses to bind twice': () => { doubleBind(); },
 
   'refuses to bind twice with debug': () => {
     Binding.config.debug = true;
