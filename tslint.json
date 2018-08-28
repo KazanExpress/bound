@@ -27,7 +27,6 @@
     "no-return-await": true,
     "no-string-literal": true,
     "no-string-throw": true,
-    "no-trailing-whitespace": true,
     "no-unbound-method": { "severity": "warning" },
     "no-unnecessary-callback-wrapper": { "severity": "warning" },
     "no-unsafe-finally": true,
