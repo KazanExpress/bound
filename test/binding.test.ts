@@ -212,5 +212,3 @@ describe('Binding', () => {
     it(name, bindingTests[name]);
   }
 });
-
-// Test
