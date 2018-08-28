@@ -15,7 +15,7 @@ export default class ElementBinding<T = any> extends Binding<T> {
     role?: BindingRole,
     event?: keyof WindowEventMap
   ) {
-    if (event && role === 'master') {
+    if (event && role === 'slave') {
       obj.addEventListener(event, this.set.bind(this, obj[prop]));
     }
 

@@ -23,7 +23,7 @@ describe('elementBinding', () => {
 
     const binding = new ElementBinding(true, 'foo');
 
-    binding.addBinding(input, 'value', 'slave', 'input');
+    binding.addBinding(input, 'value', 'slave', 'change');
 
     expect(input.value).toBe('foo');
 
@@ -33,7 +33,7 @@ describe('elementBinding', () => {
     expect(input.value).toBe('bar');
 
     input.value = 'foo';
-    input.dispatchEvent(new dom.window.Event('input'));
+    input.dispatchEvent(new dom.window.Event('change'));
 
     // @ts-ignore
     expect(binding.get()).toBe('foo');
@@ -57,26 +57,5 @@ describe('elementBinding', () => {
 
     // @ts-ignore
     expect(binding.get()).toBe('foo');
-  });
-
-  it('binds to elements\' events actively', () => {
-    const input = dom.window.document.createElement('input');
-
-    const binding = new ElementBinding(true, 'foo');
-
-    binding.addBinding(input, 'value', 'master', 'input');
-
-    expect(input.value).toBe('foo');
-
-    // @ts-ignore
-    binding.set('bar');
-
-    expect(input.value).toBe('bar');
-
-    input.value = 'foo';
-    input.dispatchEvent(new dom.window.Event('input'));
-
-    // @ts-ignore
-    expect(binding.get()).toBe(input.value);
   });
 });
