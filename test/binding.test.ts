@@ -93,9 +93,7 @@ export const bindingTests = {
     expect(obj2.test).toBe('bar');
   },
 
-  'refuses to bind twice': () => {
-    doubleBind();
-  },
+  'refuses to bind twice': doubleBind,
 
   'refuses to bind twice with debug': () => {
     Binding.config.debug = true;
@@ -117,7 +115,7 @@ export const bindingTests = {
     const binding = new Binding<string>(false, 'foo');
     let amount = 0;
 
-    binding.addBinding(obj1, 'test');
+    binding.addSlaveBinding(obj1, 'test');
     amount++;
 
     binding.addBinding(obj2, 'test');
@@ -139,7 +137,7 @@ export const bindingTests = {
     const binding = new Binding<string>(false, 'foo');
     let amount = 0;
 
-    binding.addBinding(obj1, 'test');
+    binding.addSlaveBinding(obj1, 'test');
     amount++;
 
     binding.addBinding(obj2, 'test');
@@ -183,7 +181,7 @@ export const bindingTests = {
 
     expect(binding.get()).toBe('foo');
 
-    binding.addBinding(obj2, 'test', 'master');
+    binding.addBinding(obj2, 'test');
 
     expect(binding.get()).toBe('bar');
 

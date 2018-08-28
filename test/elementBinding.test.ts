@@ -18,28 +18,26 @@ describe('elementBinding', () => {
     }
   });
 
-  it('binds to elements\' events passively', () => {
+  it('binds to elements\' events', () => {
     const input = dom.window.document.createElement('input');
 
     const binding = new ElementBinding(true, 'foo');
 
-    binding.addBinding(input, 'value', 'slave', 'change');
+    binding.addBinding(input, 'value', 'master', 'input');
 
     expect(input.value).toBe('foo');
 
-    // @ts-ignore
     binding.set('bar');
 
     expect(input.value).toBe('bar');
 
     input.value = 'foo';
-    input.dispatchEvent(new dom.window.Event('change'));
+    input.dispatchEvent(new dom.window.Event('input'));
 
-    // @ts-ignore
     expect(binding.get()).toBe('foo');
   });
 
-  it('binds to elements\' properties actively', () => {
+  it('binds to elements\' properties', () => {
     const input = dom.window.document.createElement('input');
 
     const binding = new ElementBinding(true, 'foo');
@@ -48,14 +46,12 @@ describe('elementBinding', () => {
 
     expect(input.value).toBe('foo');
 
-    // @ts-ignore
     binding.set('bar');
 
     expect(input.value).toBe('bar');
 
     input.value = 'foo';
 
-    // @ts-ignore
     expect(binding.get()).toBe('foo');
   });
 });

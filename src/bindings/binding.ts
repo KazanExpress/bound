@@ -17,7 +17,7 @@ export const defaultBindingConfig: IBindingConfig = {
 };
 
 export default class Binding<T = any> {
-  private bind(binding: IBindingSource) {
+  protected bind(binding: IBindingSource) {
     if (this.bindings.every(b => !Binding.sourcesEqual(b, binding))) {
       this.bindings.push(binding);
     } else if (Binding.config.debug) {
