@@ -1,6 +1,6 @@
 import mockConsole from 'jest-mock-console';
 
-import Binding from '@/binding';
+import { Binding } from '@/bindings';
 
 describe('Binding', () => {
   let restoreConsole;
@@ -14,7 +14,23 @@ describe('Binding', () => {
       test: 'foo'
     };
 
-    const binding = new Binding<string>(obj1, 'test');
+    const binding = new Binding<string>(false, 'foo');
+    binding.addBinding(obj1, 'test');
+
+    expect(binding.get()).toBe('foo');
+
+    binding.set('bar');
+
+    expect(obj1.test).toBe('bar');
+  });
+
+  it('assigns fresh values', () => {
+    const obj1 = {
+      test: 'bar'
+    };
+
+    const binding = new Binding<string>(false, 'foo');
+    binding.addBinding(obj1, 'test');
 
     const bound: any = {
       get test() {
@@ -27,35 +43,11 @@ describe('Binding', () => {
     };
 
     expect(bound.test).toBe('foo');
+    expect(obj1.test).toBe('foo');
 
     bound.test = 'bar';
 
     expect(obj1.test).toBe('bar');
-  });
-
-  it('assigns fresh values', () => {
-    const obj1 = {
-      test: 'foo'
-    };
-
-    const binding = new Binding<string>(obj1, 'test', 'bar');
-
-    const bound: any = {
-      get test() {
-        return binding.get();
-      },
-
-      set test(v) {
-        binding.set(v);
-      }
-    };
-
-    expect(bound.test).toBe('bar');
-    expect(obj1.test).toBe('bar');
-
-    bound.test = 'foo';
-
-    expect(obj1.test).toBe('foo');
   });
 
   it('handles multiple bindings', () => {
@@ -67,7 +59,8 @@ describe('Binding', () => {
       test: 'asd'
     };
 
-    const binding = new Binding<string>(obj1, 'test');
+    const binding = new Binding<string>(false, 'foo');
+    binding.addBinding(obj1, 'test');
 
     const bound: any = {
       get test() {
@@ -91,32 +84,29 @@ describe('Binding', () => {
     expect(obj2.test).toBe('bar');
   });
 
-  it('refuses to bind twice', () => {
+  const doubleBind = () => {
     const obj1 = {
       test: 'foo'
     };
 
-    const binding = new Binding<string>(obj1, 'test');
+    const binding = new Binding<string>(false, 'foo');
 
     binding.addBinding(obj1, 'test');
     binding.addBinding(obj1, 'test');
 
     expect(binding.bindings.length).toBe(1);
+
+    return binding;
+  };
+
+  it('refuses to bind twice', () => {
+    doubleBind();
   });
 
   it('refuses to bind twice with debug', () => {
     Binding.config.debug = true;
 
-    const obj1 = {
-      test: 'foo'
-    };
-
-    const binding = new Binding<string>(obj1, 'test');
-
-    binding.addBinding(obj1, 'test');
-    binding.addBinding(obj1, 'test');
-
-    expect(binding.bindings.length).toBe(1);
+    doubleBind();
 
     Binding.config.debug = false;
   });
@@ -130,7 +120,7 @@ describe('Binding', () => {
       test: 'asd'
     };
 
-    const binding = new Binding<string>('test', 'foo');
+    const binding = new Binding<string>(false, 'foo');
     let amount = 0;
 
     binding.addBinding(obj1, 'test');
@@ -152,7 +142,7 @@ describe('Binding', () => {
       test: 'asd'
     };
 
-    const binding = new Binding<string>('test', 'foo');
+    const binding = new Binding<string>(false, 'foo');
     let amount = 0;
 
     binding.addBinding(obj1, 'test');
@@ -181,5 +171,40 @@ describe('Binding', () => {
 
     expect(obj1.test).toBe('foo');
     expect(obj2.test).toBe('bar');
+  });
+
+  it('gets two-way binding right', () => {
+    const obj1 = {
+      test: 'foo'
+    };
+
+    const obj2 = {
+      test: 'bar'
+    };
+
+    const binding = new Binding<string>(true, 'bar');
+    expect(binding.get()).toBe('bar');
+
+    binding.addMasterBinding(obj1, 'test');
+
+    expect(binding.get()).toBe('foo');
+
+    binding.addBinding(obj2, 'test', 'master');
+
+    expect(binding.get()).toBe('bar');
+
+    obj2.test = 'foo';
+
+    expect(binding.get()).toBe('foo');
+    expect(obj1.test).toBe('foo');
+
+    obj1.test = 'bar';
+
+    expect(binding.get()).toBe('bar');
+    expect(obj2.test).toBe('bar');
+  });
+
+  it('clears bindings', () => {
+    expect(doubleBind().clearBindings().bindings.length).toBe(0);
   });
 });
