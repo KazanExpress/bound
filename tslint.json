@@ -8,7 +8,7 @@
     "arrow-return-shorthand": { "severity": "warning" },
     "class-name": true,
     "interface-name": { "severity": "error" },
-    "semicolon": true,
+    "semicolon": [true, "always", "strict-bound-class-methods"],
     "deprecation": true,
     "indent": { "options": "spaces" },
     "member-access": true,
