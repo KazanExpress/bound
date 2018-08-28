@@ -35,9 +35,10 @@ export default class Binding<T = any> {
     return this.value;
   };
   public readonly set = function (this: Binding<T>, newValue: T) {
+    // Bind value for all masters at once
     this.value = newValue;
     this.bindings.forEach(binding => {
-      if (binding.role !== 'master') {
+      if (binding.role !== 'master') { // Set value for each slave
         binding.obj[binding.prop] = newValue;
       }
     });
