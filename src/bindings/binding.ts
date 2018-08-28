@@ -52,38 +52,36 @@ export default class Binding<T = any> {
     return this.bindings[this.bindings.length - 1];
   }
 
-  public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
+  // public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
   public addMasterBinding(obj: any, prop: string | number) {
-    if (obj[prop]) {
-      this.set(obj[prop] as any);
-    } else {
-      obj[prop] = this.get();
-    }
-
-    const binding = this.bind({ obj, prop, role: 'master' });
-
-    Object.defineProperty(obj, prop, {
-      get: this.get.bind(this),
-      set: this.set.bind(this),
-      enumerable: true
-    });
-
-    return binding;
+    return this.addBinding(obj, prop, 'master');
   }
 
-  public addSlaveBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
+  // public addSlaveBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
   public addSlaveBinding(obj: any, prop: string | number) {
-    obj[prop] = this.get();
-
-    return this.bind({ obj, prop, role: 'slave' });
+    return this.addBinding(obj, prop, 'slave');
   }
 
-  public addBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>, role?: BindingRole);
+  // public addBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>, role?: BindingRole);
   public addBinding(obj: any, prop: string | number, role?: BindingRole) {
     if (this.twoWay || role === 'master') {
-      this.addMasterBinding(obj, prop);
+      if (obj[prop]) {
+        this.set(obj[prop] as any);
+      } else {
+        obj[prop] = this.get();
+      }
+
+      this.bind({ obj, prop, role: 'master' });
+
+      Object.defineProperty(obj, prop, {
+        get: this.get.bind(this),
+        set: this.set.bind(this),
+        enumerable: true
+      });
     } else {
-      this.addSlaveBinding(obj, prop);
+      obj[prop] = this.get();
+
+      this.bind({ obj, prop, role: 'slave' });
     }
 
     return this;
