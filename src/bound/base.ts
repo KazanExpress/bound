@@ -3,7 +3,7 @@ import Binding from '@/binding';
 export const hasProxy = ('Proxy' in window) || !!Proxy;
 
 export type IBindingStorage<T extends object> = {
-  [key in keyof T]: T[key] extends object ? T[key] : ProxyHandler<T> | Binding<T[key]>;
+  [key in keyof T]: T[key] extends object ? IBindingStorage<T[key]> : ProxyHandler<T> | Binding<T[key]>;
 };
 
 export interface IBoundAction<T extends object> {
