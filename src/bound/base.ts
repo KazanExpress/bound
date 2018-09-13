@@ -1,9 +1,9 @@
-import Binding from '@/binding';
-
-export const hasProxy = ('Proxy' in window) || !!Proxy;
+import Binding from '../binding';
+import BoundError from '../boundError';
+import config from '../config';
 
 export type IBindingStorage<T extends object> = {
-  [key in keyof T]: T[key] extends object ? IBindingStorage<T[key]> : ProxyHandler<T> | Binding<T[key]>;
+  [key in keyof T]: T[key] extends object ? IBindingStorage<T[key]> : (ProxyHandler<T> | Binding<T[key]>);
 };
 
 export interface IBoundAction<T extends object> {
@@ -11,21 +11,22 @@ export interface IBoundAction<T extends object> {
   prop: keyof T;
 }
 
+export type IBoundPlugin<T extends object> = (action: IBoundAction<T>) => void;
+
 export default abstract class BaseBound<T extends object> {
   protected storage: IBindingStorage<T> = {} as any;
   public bound = { __bound__: this } as T & { __bound__: BaseBound<T> };
 
-  public abstract bind<U extends T>(obj: U);
+  public constructor(obj: T, public readonly plugins?: IBoundPlugin<T>[]) {
+    if (obj instanceof BaseBound || BaseBound.isBound(obj)) {
+      throw new BoundError('Cannot rebind a bound object.');
+    }
+  }
+
+  public abstract bind<U extends T>(obj: U, twoWay?: boolean, path?: string);
+
+  public static get config() { return config; }
+  public static isBound(obj: any) {
+    return !!obj.__bound__ && (obj.__bound__ instanceof BaseBound);
+  }
 }
-
-export function fromPath(obj, path) {
-  if (!path)
-    return obj;
-
-  return path.split('.').reduce((o, i) => (o === Object(o) ? o[i] : o), obj);
-}
-
-
-// const BoundContructor = Bound;
-
-// export default BoundContructor;

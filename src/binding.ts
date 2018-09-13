@@ -1,13 +1,12 @@
+import BoundError from './boundError';
+import config from './config';
+
 export type BindingRole = 'slave' | 'master';
 
 export interface ISubscriber<T extends object = object> {
   obj: T;
   prop: string | number;
   role?: BindingRole;
-}
-
-export interface IBindingConfig {
-  debug: boolean;
 }
 
 export interface IBindingAction {
@@ -34,7 +33,7 @@ export default class Binding<T = any> {
     if (this.subscribers.every(b => !Binding.sourcesEqual(b, subscriber))) {
       this.subscribers.push(subscriber);
     } else if (Binding.config.debug) {
-      console.info(`[bound]: binding for ${subscriber.prop} is already declared.`);
+      throw new BoundError(`Binding for ${subscriber.prop} is already declared.`);
     }
 
     return subscriber;
@@ -111,7 +110,7 @@ export default class Binding<T = any> {
   public removeBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>): this;
   public removeBinding(index: number): this;
   public removeBinding() {
-    let index;
+    let index = -1;
 
     if (typeof arguments[0] === 'number') {
       index = arguments[0];
@@ -121,7 +120,10 @@ export default class Binding<T = any> {
 
       index = this.subscribers.findIndex(b => Binding.sourcesEqual(b, { obj, prop }));
     }
-    this.subscribers.splice(index, 1);
+
+    if (index !== -1) {
+      this.subscribers.splice(index, 1);
+    }
 
     return this;
   }
@@ -133,9 +135,7 @@ export default class Binding<T = any> {
   }
 
 
-  public static readonly config: IBindingConfig = {
-    debug: false
-  };
+  public static get config() { return config; }
   public static readonly sourcesEqual = (
     src1: ISubscriber | undefined, src2: ISubscriber | undefined
   ) => !!src1 && !!src2 && src1.prop === src2.prop && src1.obj === src2.obj;

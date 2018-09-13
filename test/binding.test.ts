@@ -1,6 +1,6 @@
 import mockConsole from 'jest-mock-console';
 
-import Binding from '@/binding';
+import Binding from '../src/binding';
 
 const doubleBind = () => {
   const obj1 = {
