@@ -1,6 +1,6 @@
 import mockConsole from 'jest-mock-console';
 
-import { Binding } from '@/bindings';
+import Binding from '@/binding';
 
 const doubleBind = () => {
   const obj1 = {
@@ -12,7 +12,7 @@ const doubleBind = () => {
   binding.addBinding(obj1, 'test');
   binding.addBinding(obj1, 'test');
 
-  expect(binding.bindings.length).toBe(1);
+  expect(binding.subscribers.length).toBe(1);
 
   return binding;
 };
@@ -121,8 +121,7 @@ export const bindingTests = {
     binding.addBinding(obj2, 'test');
     amount++;
 
-    expect(binding.bindings.length).toBe(amount);
-    expect(binding.lastBinding).toEqual(binding.bindings[binding.bindings.length - 1]);
+    expect(binding.subscribers.length).toBe(amount);
   },
 
   'removes bindings correctly': () => {
@@ -143,7 +142,7 @@ export const bindingTests = {
     binding.addBinding(obj2, 'test');
     amount++;
 
-    expect(binding.bindings.length).toBe(amount);
+    expect(binding.subscribers.length).toBe(amount);
 
     binding.set('bar');
 
@@ -197,7 +196,7 @@ export const bindingTests = {
   },
 
   'clears bindings': () => {
-    expect(doubleBind().clearBindings().bindings.length).toBe(0);
+    expect(doubleBind().clearBindings().subscribers.length).toBe(0);
   },
 };
 
