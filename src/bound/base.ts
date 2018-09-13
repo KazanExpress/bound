@@ -18,6 +18,13 @@ export default abstract class BaseBound<T extends object> {
   public abstract bind<U extends T>(obj: U);
 }
 
+export function fromPath(obj, path) {
+  if (!path)
+    return obj;
+
+  return path.split('.').reduce((o, i) => (o === Object(o) ? o[i] : o), obj);
+}
+
 
 // const BoundContructor = Bound;
 

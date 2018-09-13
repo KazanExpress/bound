@@ -1,5 +1,5 @@
 import Binding from '@/binding';
-import BaseBound, { IBindingStorage } from '@/bound/base';
+import BaseBound, { IBindingStorage, fromPath } from '@/bound/base';
 
 export type ISimpleBindingStorage<T extends object> = {
   [key in keyof T]: T[key] extends object ? ISimpleBindingStorage<T[key]> : Extract<Binding<T[key]>, IBindingStorage<T>[key]>;
@@ -27,9 +27,31 @@ export class SimpleBound<T extends object> extends BaseBound<T> {
     }
   }
 
-  public bind<U extends T>(obj: U) {
-    for (const key in this.storage) {
-      (this.storage[key] as Binding).addMasterBinding(obj, key);
+  public bind<U extends T>(obj: U, path: string = '') {
+    for (const key in fromPath(this.storage, path)) {
+      if (this.storage[key] instanceof Binding) {
+        (this.storage[key] as Binding).addMasterBinding(obj, key);
+      } else {
+        this.bind(obj[key], !path ? key : `${path}.${key}`);
+      }
     }
   }
 }
+
+const b = new SimpleBound({
+  test: 'foo',
+  internal: {
+    another: 'bar',
+    b: 2
+  }
+});
+
+const obj2 = {
+  test: 'foo',
+  internal: {
+    another: 'bar',
+    b: 2
+  }
+};
+
+b.bind(obj2);
