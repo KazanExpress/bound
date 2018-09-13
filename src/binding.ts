@@ -23,6 +23,15 @@ export type IBindingPlugin<T = any> = (
 ) => void;
 
 export default class Binding<T = any> {
+  private callPlugins(type: 'get' | 'set') {
+    if (this.plugins) {
+      this.plugins.forEach(plugin => plugin(this.value, Object.freeze({
+        type,
+        subscribers: this.subscribers
+      })));
+    }
+  }
+
   protected bind(subscriber: ISubscriber) {
     if (this.subscribers.every(b => !Binding.sourcesEqual(b, subscriber))) {
       this.subscribers.push(subscriber);
@@ -33,19 +42,13 @@ export default class Binding<T = any> {
     return subscriber;
   }
 
-  protected value: T;
-
   public readonly subscribers: ISubscriber[] = [];
-  public readonly twoWay: boolean;
 
   constructor(
-    twoWay: boolean,
-    initialValue: T,
+    public readonly twoWay: boolean,
+    protected value: T,
     public readonly plugins?: IBindingPlugin<T>[] // TODO: add tests for this
-  ) {
-    this.twoWay = twoWay || false;
-    this.value = initialValue;
-  }
+  ) { }
 
   public get() {
     this.callPlugins('get');
@@ -70,15 +73,6 @@ export default class Binding<T = any> {
         binding.obj[binding.prop] = newValue;
       }
     });
-  }
-
-  public callPlugins(type: 'get' | 'set') {
-    if (this.plugins) {
-      this.plugins.forEach(plugin => plugin(this.value, Object.freeze({
-        type,
-        subscribers: this.subscribers
-      })));
-    }
   }
 
   // public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
