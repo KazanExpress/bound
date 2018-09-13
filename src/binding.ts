@@ -2,7 +2,7 @@ import packageInfo from '@/../package.json';
 
 export type BindingRole = 'slave' | 'master';
 
-export interface IBindingSource<T extends object = object> {
+export interface ISubscriber<T extends object = object> {
   obj: T;
   prop: string | number;
   role?: BindingRole;
@@ -17,40 +17,42 @@ export const defaultBindingConfig: IBindingConfig = {
 };
 
 export default class Binding<T = any> {
-  protected bind(binding: IBindingSource) {
-    if (this.bindings.every(b => !Binding.sourcesEqual(b, binding))) {
-      this.bindings.push(binding);
+  protected bind(subscriber: ISubscriber) {
+    if (this.subscribers.every(b => !Binding.sourcesEqual(b, subscriber))) {
+      this.subscribers.push(subscriber);
     } else if (Binding.config.debug) {
-      console.info(`[${packageInfo.name}]: binding for ${binding.prop} is already declared.`);
+      console.info(`[${packageInfo.name}]: binding for ${subscriber.prop} is already declared.`);
     }
 
-    return binding;
+    return subscriber;
   }
 
   protected value: T;
 
-  public readonly bindings: IBindingSource[] = [];
+  public readonly subscribers: ISubscriber[] = [];
   public readonly twoWay: boolean;
-  public readonly get = function (this: Binding<T>) {
-    return this.value;
-  };
-  public readonly set = function (this: Binding<T>, newValue: T) {
-    // Bind value for all masters at once
-    this.value = newValue;
-    this.bindings.forEach(binding => {
-      if (binding.role !== 'master') { // Set value for each slave
-        binding.obj[binding.prop] = newValue;
-      }
-    });
-  };
 
   constructor(twoWay: boolean, initialValue: T) {
     this.twoWay = twoWay || false;
     this.value = initialValue;
   }
 
-  public get lastBinding() {
-    return this.bindings[this.bindings.length - 1];
+  public get() { return this.value; }
+
+  public set(newValue: T) {
+    // Bind value for all masters at once
+    this.value = newValue;
+
+    // Then notify all slaves about the change
+    this.notify(newValue);
+  }
+
+  public notify(newValue: T) {
+    this.subscribers.forEach(binding => {
+      if (binding.role !== 'master') { // Set value for each slave
+        binding.obj[binding.prop] = newValue;
+      }
+    });
   }
 
   // public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
@@ -99,15 +101,15 @@ export default class Binding<T = any> {
       const obj = arguments[0];
       const prop = arguments[1];
 
-      index = this.bindings.findIndex(b => Binding.sourcesEqual(b, { obj, prop }));
+      index = this.subscribers.findIndex(b => Binding.sourcesEqual(b, { obj, prop }));
     }
-    this.bindings.splice(index, 1);
+    this.subscribers.splice(index, 1);
 
     return this;
   }
 
   public clearBindings() {
-    this.bindings.splice(0);
+    this.subscribers.splice(0);
 
     return this;
   }
@@ -115,6 +117,6 @@ export default class Binding<T = any> {
 
   public static readonly config = defaultBindingConfig;
   public static readonly sourcesEqual = (
-    src1: IBindingSource | undefined, src2: IBindingSource | undefined
+    src1: ISubscriber | undefined, src2: ISubscriber | undefined
   ) => !!src1 && !!src2 && src1.prop === src2.prop && src1.obj === src2.obj;
 }
