@@ -18,11 +18,11 @@ export default abstract class BaseBound<T extends object> {
   public bound = { __bound__: this } as T & { __bound__: BaseBound<T> };
 
   public constructor(obj: T, public readonly plugins?: IBoundPlugin<T>[]) {
-    if (typeof obj !== 'object') {
+    if (BaseBound.config.debug && typeof obj !== 'object') {
       throw new BoundError('Only object binds are allowed. For property and pure value bindings use Binding from "bound/binding".');
     }
 
-    if (obj instanceof BaseBound || BaseBound.isBound(obj)) {
+    if (BaseBound.config.debug && obj instanceof BaseBound || BaseBound.isBound(obj)) {
       throw new BoundError('Cannot rebind a bound object.');
     }
   }

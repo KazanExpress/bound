@@ -5,4 +5,4 @@ export function fromPath(obj, path) {
   return path.split('.').reduce((o, i) => (o === Object(o) ? o[i] : o), obj);
 }
 
-export const hasProxy = ('Proxy' in window) || !!Proxy;
+export const hasProxy = !!Proxy;

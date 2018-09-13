@@ -10,9 +10,20 @@ const doubleBind = () => {
   const binding = new Binding<string>(false, 'foo');
 
   binding.addBinding(obj1, 'test');
-  binding.addBinding(obj1, 'test');
 
-  expect(binding.subscribers.length).toBe(1);
+  let threw = false;
+
+  try {
+    binding.addBinding(obj1, 'test');
+  } catch (e) {
+    threw = true;
+  }
+
+  if (Binding.config.debug) {
+    expect(threw).toBe(true);
+  } else {
+    expect(threw).toBe(false);
+  }
 
   return binding;
 };

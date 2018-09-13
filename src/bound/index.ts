@@ -24,6 +24,6 @@ export {
   IBoundPlugin
 } from './base';
 
-export * from '@/config';
-export * from '@/util';
-export { default as BoundError } from '@/boundError';
+export * from '../config';
+export * from '../util';
+export { default as BoundError } from '../boundError';
