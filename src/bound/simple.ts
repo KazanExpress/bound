@@ -2,11 +2,11 @@ import Binding from '@/binding';
 import BaseBound, { IBindingStorage } from '@/bound/base';
 
 export type ISimpleBindingStorage<T extends object> = {
-  [key in keyof T]: T[key] extends object ? T[key] : Extract<ProxyHandler<T>, IBindingStorage<T>[key]>;
+  [key in keyof T]: T[key] extends object ? T[key] : Extract<Binding<T[key]>, IBindingStorage<T>[key]>;
 };
 
 export class SimpleBound<T extends object> extends BaseBound<T> {
-  protected storage: ISimpleBindingStorage<T> = {} as any;
+  public storage: ISimpleBindingStorage<T> = {} as any;
 
   public constructor(obj: T) {
     super();
@@ -25,3 +25,9 @@ export class SimpleBound<T extends object> extends BaseBound<T> {
     }
   }
 }
+
+const test = new SimpleBound({
+  test: 'foo'
+});
+
+test.storage.test.;
