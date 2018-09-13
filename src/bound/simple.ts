@@ -37,21 +37,3 @@ export class SimpleBound<T extends object> extends BaseBound<T> {
     }
   }
 }
-
-const b = new SimpleBound({
-  test: 'foo',
-  internal: {
-    another: 'bar',
-    b: 2
-  }
-});
-
-const obj2 = {
-  test: 'foo',
-  internal: {
-    another: 'bar',
-    b: 2
-  }
-};
-
-b.bind(obj2);
