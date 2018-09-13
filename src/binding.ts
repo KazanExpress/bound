@@ -1,5 +1,3 @@
-import packageInfo from '@/../package.json';
-
 export type BindingRole = 'slave' | 'master';
 
 export interface ISubscriber<T extends object = object> {
@@ -36,7 +34,7 @@ export default class Binding<T = any> {
     if (this.subscribers.every(b => !Binding.sourcesEqual(b, subscriber))) {
       this.subscribers.push(subscriber);
     } else if (Binding.config.debug) {
-      console.info(`[${packageInfo.name}]: binding for ${subscriber.prop} is already declared.`);
+      console.info(`[bound]: binding for ${subscriber.prop} is already declared.`);
     }
 
     return subscriber;
