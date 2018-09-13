@@ -7,7 +7,7 @@ export type IProxyBindingStorage<T extends object> = {
 };
 
 export default class ProxyBound<T extends object> extends BaseBound<T> {
-  protected storage: IProxyBindingStorage<T> = {} as any;
+  public storage: IProxyBindingStorage<T> = {} as any;
 
   constructor(obj: T, plugins?: IBoundPlugin<T>[]) {
     super(obj, plugins);
