@@ -2,12 +2,17 @@ import Binding from '@/binding';
 
 export const hasProxy = ('Proxy' in window) || !!Proxy;
 
-type IBIndingStorage<T extends object> = {
-  [key in keyof T]: ProxyHandler<T> | Binding<T[key]> | T[key];
+export type IBindingStorage<T extends object> = {
+  [key in keyof T]: T[key] extends object ? T[key] : ProxyHandler<T> | Binding<T[key]>;
 };
 
+export interface IBoundAction<T extends object> {
+  obj; T;
+  prop: keyof T;
+}
+
 export default abstract class BaseBound<T extends object> {
-  protected storage: IBIndingStorage<T> = {} as any;
+  protected storage: IBindingStorage<T> = {} as any;
   public bound = { __bound__: this } as T & { __bound__: BaseBound<T> };
 
   public bind<U extends T>(obj: U) {
