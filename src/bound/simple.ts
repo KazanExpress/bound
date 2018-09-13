@@ -26,8 +26,3 @@ export class SimpleBound<T extends object> extends BaseBound<T> {
   }
 }
 
-const test = new SimpleBound({
-  test: 'foo'
-});
-
-test.storage.test.;
