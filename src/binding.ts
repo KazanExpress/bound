@@ -12,9 +12,15 @@ export interface IBindingConfig {
   debug: boolean;
 }
 
-export const defaultBindingConfig: IBindingConfig = {
-  debug: false
-};
+export interface IBindingAction {
+  type: 'get' | 'set';
+  subscribers: ISubscriber[];
+}
+
+export type IBindingPlugin<T = any> = (
+  value: T,
+  action: IBindingAction
+) => void;
 
 export default class Binding<T = any> {
   protected bind(subscriber: ISubscriber) {
@@ -32,12 +38,20 @@ export default class Binding<T = any> {
   public readonly subscribers: ISubscriber[] = [];
   public readonly twoWay: boolean;
 
-  constructor(twoWay: boolean, initialValue: T) {
+  constructor(
+    twoWay: boolean,
+    initialValue: T,
+    public readonly plugins?: IBindingPlugin<T>[] // TODO: add tests for this
+  ) {
     this.twoWay = twoWay || false;
     this.value = initialValue;
   }
 
-  public get() { return this.value; }
+  public get() {
+    this.callPlugins('get');
+
+    return this.value;
+  }
 
   public set(newValue: T) {
     // Bind value for all masters at once
@@ -45,6 +59,9 @@ export default class Binding<T = any> {
 
     // Then notify all slaves about the change
     this.notify(newValue);
+
+    // Then call plugins
+    this.callPlugins('set');
   }
 
   public notify(newValue: T) {
@@ -53,6 +70,15 @@ export default class Binding<T = any> {
         binding.obj[binding.prop] = newValue;
       }
     });
+  }
+
+  public callPlugins(type: 'get' | 'set') {
+    if (this.plugins) {
+      this.plugins.forEach(plugin => plugin(this.value, Object.freeze({
+        type,
+        subscribers: this.subscribers
+      })));
+    }
   }
 
   // public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
@@ -115,7 +141,9 @@ export default class Binding<T = any> {
   }
 
 
-  public static readonly config = defaultBindingConfig;
+  public static readonly config: IBindingConfig = {
+    debug: false
+  };
   public static readonly sourcesEqual = (
     src1: ISubscriber | undefined, src2: ISubscriber | undefined
   ) => !!src1 && !!src2 && src1.prop === src2.prop && src1.obj === src2.obj;
