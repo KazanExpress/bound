@@ -15,11 +15,7 @@ export default abstract class BaseBound<T extends object> {
   protected storage: IBindingStorage<T> = {} as any;
   public bound = { __bound__: this } as T & { __bound__: BaseBound<T> };
 
-  public bind<U extends T>(obj: U) {
-    for (const key in this.storage) {
-      (this.storage[key] as Binding).addMasterBinding(obj, key);
-    }
-  }
+  public abstract bind<U extends T>(obj: U);
 }
 
 

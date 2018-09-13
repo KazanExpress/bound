@@ -26,4 +26,10 @@ export class SimpleBound<T extends object> extends BaseBound<T> {
       }
     }
   }
+
+  public bind<U extends T>(obj: U) {
+    for (const key in this.storage) {
+      (this.storage[key] as Binding).addMasterBinding(obj, key);
+    }
+  }
 }
