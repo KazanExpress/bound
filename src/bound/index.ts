@@ -1,3 +1,9 @@
+import SimpleBound from './simple';
+
+export function bound<T extends object>(target: T): T {
+  return new SimpleBound(target).bound;
+}
+
 export {
   default,
   ISimpleBindingStorage
