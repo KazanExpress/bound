@@ -10,7 +10,7 @@ import pkg from './package.json';
 const libraryName = pkg.name;
 
 export default {
-  input: `src/${libraryName}.ts`,
+  input: `src/${libraryName}/index.ts`,
   output: [
     { file: pkg.main, name: camelCase(libraryName), format: 'umd', sourcemap: true },
     { file: pkg.module, format: 'es', sourcemap: true },

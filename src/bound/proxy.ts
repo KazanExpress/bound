@@ -7,4 +7,8 @@ export type IProxyBindingStorage<T extends object> = {
 
 export class ProxyBound<T extends object> extends BaseBound<T> {
   protected storage: IProxyBindingStorage<T> = {} as any;
+
+  public bind<U extends T>(obj: U) {
+    throw new Error('Method not implemented.');
+  }
 }
