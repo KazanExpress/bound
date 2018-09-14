@@ -7,6 +7,6 @@
 
 ## Why?
 
-Many front-end libraries and frameworks use some form of data-binding under the hood. That binding usually comes in various shapes and sizes, all of which end up in the "vendor" part of your project. But currently there's no truly utilitary and versatile solution. So most of the time you want to use the power of, let's say, two-way binding in you own library or project - you have to code that part from scratch.
+Many JavaScript libraries and frameworks use some form of data-binding under the hood. That binding usually comes in various shapes and sizes, all of which end up in the "vendor" part of your project. But currently there's no truly utilitary and versatile solution. So most of the time you want to use the power of, let's say, two-way binding in you own library or project - you have to code that part from scratch.
 
 `Bound` aims to change that.
