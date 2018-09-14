@@ -1,9 +1,9 @@
 # bound
 > A simple and customizable reactive binding framework. Work in progress.
 
-[![npm](https://img.shields.io/npm/v/vue-simple-suggest.svg?style=flat-square)](https://www.npmjs.com/package/simple-bound)
+[![npm](https://img.shields.io/npm/v/simple-bound.svg?style=flat-square)](https://www.npmjs.com/package/simple-bound)
 [![](https://img.shields.io/badge/github-repo-lightgray.svg?style=flat-square)](https://github.com/KazanExpress/bound)
-[![npm](https://img.shields.io/npm/dt/vue-simple-suggest.svg?style=flat-square)](https://www.npmjs.com/package/simple-bound)
+[![npm](https://img.shields.io/npm/dt/simple-bound.svg?style=flat-square)](https://www.npmjs.com/package/simple-bound)
 
 ## Why?
 
