@@ -1,13 +1,13 @@
-import SimpleBound from './simple';
+import Bound from './bound';
 
 export function bound<T extends object>(target: T): T {
-  return new SimpleBound(target).bound;
+  return new Bound(target).bound;
 }
 
 export {
   default,
   ISimpleBindingStorage
-} from './simple';
+} from './bound';
 
 export {
   default as Binding,

@@ -1,6 +1,6 @@
 import Binding from '../binding';
 import BoundError from '../boundError';
-import BaseBound, { IBoundPlugin } from '@/bound/base';
+import BaseBound, { IBoundPlugin } from './base';
 
 export type IProxyBindingStorage<T extends object> = {
   [key in keyof T]: T[key] extends object ? IProxyBindingStorage<T[key]> : ProxyHandler<T>;
@@ -14,7 +14,11 @@ export default class ProxyBound<T extends object> extends BaseBound<T> {
     throw new BoundError('Class not implemented.');
   }
 
-  public bind<U extends T>(obj: U, twoWay?: boolean, path?: string) {
+  public bind<U extends T>(obj: U, twoWay?: boolean) {
+    throw new BoundError('Method not implemented.');
+  }
+
+  public unbind<U extends T>(obj: U) {
     throw new BoundError('Method not implemented.');
   }
 }

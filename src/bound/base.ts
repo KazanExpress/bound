@@ -27,7 +27,8 @@ export default abstract class BaseBound<T extends object> {
     }
   }
 
-  public abstract bind<U extends T>(obj: U, twoWay?: boolean, path?: string);
+  public abstract bind<U extends T>(obj: U, twoWay?: boolean);
+  public abstract unbind<U extends T>(obj: U);
 
   public static get config() { return config; }
   public static isBound(obj: any) {
