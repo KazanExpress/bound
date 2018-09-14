@@ -64,8 +64,8 @@ export default class Binding<T = any> {
     this.callPlugins('set');
   }
 
-  public notify(newValue: T) {
-    this.subscribers.forEach(binding => {
+  public async notify(newValue: T) {
+    this.subscribers.forEach(async binding => {
       if (binding.role !== 'master') { // Set value for each slave
         binding.obj[binding.prop] = newValue;
       }
