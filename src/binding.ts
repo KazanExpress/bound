@@ -30,7 +30,7 @@ export default class Binding<T = any> {
   }
 
   protected bind(subscriber: ISubscriber) {
-    if (this.subscribers.every(b => !Binding.sourcesEqual(b, subscriber))) {
+    if (this.subscribers.every(b => !Binding.subscriptionsEqual(b, subscriber))) {
       this.subscribers.push(subscriber);
     } else if (Binding.config.debug) {
       throw new BoundError(`Binding for ${subscriber.prop} is already declared.`);
@@ -119,7 +119,7 @@ export default class Binding<T = any> {
       const obj = arguments[0];
       const prop = arguments[1];
 
-      index = this.subscribers.findIndex(b => Binding.sourcesEqual(b, { obj, prop }));
+      index = this.subscribers.findIndex(b => Binding.subscriptionsEqual(b, { obj, prop }));
     }
 
 
@@ -145,7 +145,7 @@ export default class Binding<T = any> {
 
 
   public static get config() { return config; }
-  public static readonly sourcesEqual = (
+  public static readonly subscriptionsEqual = (
     src1: ISubscriber | undefined, src2: ISubscriber | undefined
   ) => !!src1 && !!src2 && src1.prop === src2.prop && src1.obj === src2.obj;
 }
