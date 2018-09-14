@@ -122,7 +122,15 @@ export default class Binding<T = any> {
       index = this.subscribers.findIndex(b => Binding.sourcesEqual(b, { obj, prop }));
     }
 
+
     if (index !== -1) {
+      // Also remove getters and setters
+      if (this.subscribers[index].role === 'master') {
+        Object.defineProperty(this.subscribers[index].obj, this.subscribers[index].prop, {
+          value: this.value,
+          writable: true
+        });
+      }
       this.subscribers.splice(index, 1);
     }
 
