@@ -1,56 +1,75 @@
-import packageInfo from '@/../package.json';
+import BoundError from './boundError';
+import config from './config';
 
 export type BindingRole = 'slave' | 'master';
 
-export interface IBindingSource<T extends object = object> {
+export interface ISubscriber<T extends object = object> {
   obj: T;
   prop: string | number;
   role?: BindingRole;
 }
 
-export interface IBindingConfig {
-  debug: boolean;
+export interface IBindingAction {
+  type: 'get' | 'set';
+  subscribers: ISubscriber[];
 }
 
-export const defaultBindingConfig: IBindingConfig = {
-  debug: false
-};
+export type IBindingPlugin<T = any> = (
+  value: T,
+  action: IBindingAction
+) => void;
 
 export default class Binding<T = any> {
-  protected bind(binding: IBindingSource) {
-    if (this.bindings.every(b => !Binding.sourcesEqual(b, binding))) {
-      this.bindings.push(binding);
-    } else if (Binding.config.debug) {
-      console.info(`[${packageInfo.name}]: binding for ${binding.prop} is already declared.`);
+  private callPlugins(type: 'get' | 'set') {
+    if (this.plugins) {
+      this.plugins.forEach(plugin => plugin(this.value, Object.freeze({
+        type,
+        subscribers: this.subscribers
+      })));
     }
-
-    return binding;
   }
 
-  protected value: T;
+  protected bind(subscriber: ISubscriber) {
+    if (this.subscribers.every(b => !Binding.sourcesEqual(b, subscriber))) {
+      this.subscribers.push(subscriber);
+    } else if (Binding.config.debug) {
+      throw new BoundError(`Binding for ${subscriber.prop} is already declared.`);
+    }
 
-  public readonly bindings: IBindingSource[] = [];
-  public readonly twoWay: boolean;
-  public readonly get = function (this: Binding<T>) {
+    return subscriber;
+  }
+
+  public readonly subscribers: ISubscriber[] = [];
+
+  constructor(
+    public readonly twoWay: boolean,
+    protected value: T,
+    public readonly plugins?: IBindingPlugin<T>[] // TODO: add tests for this
+  ) { }
+
+  public get() {
+    this.callPlugins('get');
+
     return this.value;
-  };
-  public readonly set = function (this: Binding<T>, newValue: T) {
+  }
+
+  public set(newValue: T) {
     // Bind value for all masters at once
     this.value = newValue;
-    this.bindings.forEach(binding => {
+
+    // Then notify all slaves about the change
+    this.notify(newValue);
+
+    // Then call plugins
+    this.callPlugins('set');
+  }
+
+  public notify(newValue: T) {
+    this.subscribers.forEach(binding => {
       if (binding.role !== 'master') { // Set value for each slave
         binding.obj[binding.prop] = newValue;
       }
     });
-  };
-
-  constructor(twoWay: boolean, initialValue: T) {
-    this.twoWay = twoWay || false;
-    this.value = initialValue;
-  }
-
-  public get lastBinding() {
-    return this.bindings[this.bindings.length - 1];
   }
 
   // public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
@@ -66,7 +85,7 @@ export default class Binding<T = any> {
   // public addBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>, role?: BindingRole);
   public addBinding(obj: any, prop: string | number, role?: BindingRole) {
     if (this.twoWay || role === 'master') {
-      if (obj[prop]) {
+      if (obj[prop] !== undefined) {
         this.set(obj[prop] as any);
       } else {
         obj[prop] = this.get();
@@ -91,7 +110,7 @@ export default class Binding<T = any> {
   public removeBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>): this;
   public removeBinding(index: number): this;
   public removeBinding() {
-    let index;
+    let index = -1;
 
     if (typeof arguments[0] === 'number') {
       index = arguments[0];
@@ -99,22 +118,25 @@ export default class Binding<T = any> {
       const obj = arguments[0];
       const prop = arguments[1];
 
-      index = this.bindings.findIndex(b => Binding.sourcesEqual(b, { obj, prop }));
+      index = this.subscribers.findIndex(b => Binding.sourcesEqual(b, { obj, prop }));
     }
-    this.bindings.splice(index, 1);
+
+    if (index !== -1) {
+      this.subscribers.splice(index, 1);
+    }
 
     return this;
   }
 
   public clearBindings() {
-    this.bindings.splice(0);
+    this.subscribers.splice(0);
 
     return this;
   }
 
 
-  public static readonly config = defaultBindingConfig;
+  public static get config() { return config; }
   public static readonly sourcesEqual = (
-    src1: IBindingSource | undefined, src2: IBindingSource | undefined
+    src1: ISubscriber | undefined, src2: ISubscriber | undefined
   ) => !!src1 && !!src2 && src1.prop === src2.prop && src1.obj === src2.obj;
 }
