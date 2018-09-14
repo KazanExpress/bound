@@ -26,6 +26,16 @@ describe('fromPath', () => {
     // tslint:disable-next-line:no-magic-numbers
     expect(fromPath(obj, 2)).toBe(3);
   });
+
+  it('resolves wrong path', () => {
+    const obj = {
+      very: {
+        here: '!'
+      }
+    };
+
+    expect(fromPath(obj, 'very.nested.object.here')).toBe(undefined);
+  });
 });
 
 describe('assignToPath', () => {
@@ -40,6 +50,9 @@ describe('assignToPath', () => {
         }
       }
     };
+
+    assignToPath(obj, '', 1);
+    expect(fromPath(obj, '')).toMatchObject(obj);
 
     // tslint:disable-next-line:no-magic-numbers
     assignToPath(obj, 2, 12);
@@ -56,5 +69,28 @@ describe('assignToPath', () => {
     assignToPath(obj, 'very.nested', '...');
     expect(fromPath(obj, 'very.nested')).toBe('...');
     expect(fromPath(obj, 'very')).toMatchObject({ nested: '...' });
+
+    assignToPath(obj, 'very', '...');
+    expect(fromPath(obj, 'very')).toBe('...');
+
+    assignToPath(obj, 'very', '!!!');
+    expect(fromPath(obj, 'very')).toBe('!!!');
+  });
+
+  it('resolves wrong path', () => {
+    const obj = {
+      very: {
+        here: '!'
+      }
+    };
+    assignToPath(obj, 'very.nested.object.here', '!');
+    expect(fromPath(obj, 'very.nested.object.here')).toBe('!');
+  });
+
+  it('handles values', () => {
+    const notReallyAnObj = 'haha';
+
+    assignToPath(notReallyAnObj, 'prop', 'nooo');
+    expect(fromPath(notReallyAnObj, 'prop')).toBe(undefined); // Because the reference is lost here
   });
 });

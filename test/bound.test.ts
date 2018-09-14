@@ -10,10 +10,11 @@ describe('Bound', () => {
     };
 
     const bound = new Bound(obj);
-    // bound.bind(obj);
+    bound.bind(obj);
+
 
     function check(o, b) {
-      for (const key in o) {
+      for (const key in o) if (key !== '__bound__') {
         if (typeof o[key] !== 'object') {
           expect(o[key]).toEqual(b[key]);
         } else {
