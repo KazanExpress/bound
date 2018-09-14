@@ -80,6 +80,8 @@ export default class Bound<T extends object> extends BaseBound<T> {
         }
       }
 
+      delete (_obj as any).__bound__;
+
       return JSON.parse(JSON.stringify(_obj));
     };
 

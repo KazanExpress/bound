@@ -133,4 +133,26 @@ describe('Bound', () => {
 
     expect(threw).toBe(true);
   });
+
+  it('unbinds', () => {
+    const obj = {
+      test: 'foo'
+    };
+
+    const obj2 = {
+      test: 'foo'
+    };
+
+    const bound = new Bound(obj);
+    bound.bind(obj);
+    bound.bind(obj2);
+
+    obj.test = 'bar';
+    expect(obj2.test).toBe('bar');
+
+    bound.unbind(obj);
+
+    obj.test = 'foo';
+    expect(obj2.test).toBe('bar');
+  });
 });
