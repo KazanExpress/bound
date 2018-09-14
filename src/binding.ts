@@ -85,7 +85,7 @@ export default class Binding<T = any> {
   // public addBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>, role?: BindingRole);
   public addBinding(obj: any, prop: string | number, role?: BindingRole) {
     if (this.twoWay || role === 'master') {
-      if (obj[prop]) {
+      if (obj[prop] !== undefined) {
         this.set(obj[prop] as any);
       } else {
         obj[prop] = this.get();
