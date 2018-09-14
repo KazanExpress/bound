@@ -44,7 +44,7 @@ export default class Binding<T = any> {
   constructor(
     public readonly twoWay: boolean,
     protected value: T,
-    public readonly plugins?: IBindingPlugin<T>[] // TODO: add tests for this
+    public readonly plugins?: IBindingPlugin<T>[]
   ) { }
 
   public get() {
