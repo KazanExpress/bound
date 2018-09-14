@@ -93,6 +93,7 @@ export default class Binding<T = any> {
 
       this.bind({ obj, prop, role: 'master' });
 
+      // TODO: account for a case of having enumerable get/set on a prop instead of normal value
       Object.defineProperty(obj, prop, {
         get: this.get.bind(this),
         set: this.set.bind(this),
