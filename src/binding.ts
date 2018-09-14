@@ -72,17 +72,17 @@ export default class Binding<T = any> {
     });
   }
 
-  // public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
+  public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
   public addMasterBinding(obj: any, prop: string | number) {
     return this.addBinding(obj, prop, 'master');
   }
 
-  // public addSlaveBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
+  public addSlaveBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
   public addSlaveBinding(obj: any, prop: string | number) {
     return this.addBinding(obj, prop, 'slave');
   }
 
-  // public addBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>, role?: BindingRole);
+  public addBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>, role?: BindingRole);
   public addBinding(obj: any, prop: string | number, role?: BindingRole) {
     if (this.twoWay || role === 'master') {
       if (obj[prop] !== undefined) {

@@ -33,7 +33,7 @@ export default class SimpleBound<T extends object> extends BaseBound<T> {
               }))
               : plugins
           );
-          binding.addBinding(this.bound, key as string);
+          binding.addBinding(this.bound, key as any);
 
           this.storage[key] = binding;
         }
@@ -46,20 +46,16 @@ export default class SimpleBound<T extends object> extends BaseBound<T> {
   }
 
   public bind<U extends T>(obj: U, twoWay: boolean = true, path: string = '') {
-    for (const key in fromPath(this.storage, path)) if (key !== '__bound__') {
+    for (const key in fromPath(this.storage, path)) {
       const nextPath = !path ? key : `${path}.${key}`;
       const nextStorage = fromPath(this.storage, nextPath);
       const nextValue = obj[key];
 
       if (nextStorage instanceof Binding) {
-        (nextStorage as Binding).addBinding(obj, key, twoWay ? 'master' : 'slave');
-      } else if (typeof nextValue === 'object') {
-        this.bind(nextValue, twoWay, nextPath);
+        (nextStorage as Binding).addBinding(obj, key as any, twoWay ? 'master' : 'slave');
       } else {
-        console.error('This should not happen!', nextValue);
+        this.bind(nextValue, twoWay, nextPath);
       }
-    } else if (SimpleBound.config.debug) {
-      throw new BoundError(`Cannot rebind a bound object at ${path || key}.`);
     }
 
     if (!path) {

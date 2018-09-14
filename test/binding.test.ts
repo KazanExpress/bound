@@ -209,6 +209,57 @@ export const bindingTests = {
   'clears bindings': () => {
     expect(doubleBind().clearBindings().subscribers.length).toBe(0);
   },
+
+  'defines plugins': () => {
+    const obj1 = {
+      test: 'foo'
+    };
+
+    const obj2 = {
+      test: 'bar'
+    };
+
+    let gettersCalled = 0;
+    let settersCalled = 0;
+
+    const binding = new Binding(true, 'bar', [
+      (_, action) => {
+        if (action.type === 'get') {
+          gettersCalled++;
+        }
+      },
+      (_, action) => {
+        if (action.type === 'set') {
+          settersCalled++;
+        }
+      }
+    ]);
+
+    let realSettersCalled = 0;
+    let realGettersCalled = 0;
+
+    binding.addBinding(obj1, 'test'); realSettersCalled++;
+    binding.addBinding(obj2, 'test'); realSettersCalled++;
+
+    obj2.test = obj1.test; realGettersCalled++; realSettersCalled++;
+    obj2.test = 'asd';     realSettersCalled++;
+    obj1.test = obj2.test; realGettersCalled++; realSettersCalled++;
+
+    // tslint:disable-next-line:no-magic-numbers
+    expect(gettersCalled).toBe(realGettersCalled);
+    // tslint:disable-next-line:no-magic-numbers
+    expect(settersCalled).toBe(realSettersCalled);
+
+    expect(obj1.test).toBe(obj2.test);
+    expect(obj1.test).toBe('asd');
+  },
+
+  'handles removal of unknown bindings': () => {
+    const obj = { test: 'a' };
+
+    const binding = new Binding(true, 'bar');
+    binding.removeBinding(obj, 'test'); // Could also throw here!
+  }
 };
 
 describe('Binding', () => {

@@ -112,7 +112,9 @@ describe('Bound', () => {
   });
 
   it('assigns bound as function', () => {
-    expect(bound({})).toHaveProperty('__bound__');
+    const _bound = bound({});
+    expect(_bound).toHaveProperty('__bound__');
+    expect(Bound.isBound(_bound)).toBe(true);
   });
 
   it('throws on circular dependencies', () => {
