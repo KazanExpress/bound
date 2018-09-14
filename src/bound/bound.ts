@@ -33,7 +33,7 @@ export default class Bound<T extends object> extends BaseBound<T> {
               }))
               : plugins
           );
-          binding.addBinding(this.bound, key as any);
+          binding.addSubscriber(this.bound, key as any);
 
           this.storage[key] = binding;
         }
@@ -53,7 +53,7 @@ export default class Bound<T extends object> extends BaseBound<T> {
         const nextValue = _obj[key];
 
         if (nextStorage instanceof Binding) {
-          (nextStorage as Binding).addBinding(_obj, key as any, _twoWay ? 'master' : 'slave');
+          (nextStorage as Binding).addSubscriber(_obj, key as any, _twoWay ? 'master' : 'slave');
         } else {
           __bind(nextValue, _twoWay, nextPath);
         }
@@ -74,7 +74,7 @@ export default class Bound<T extends object> extends BaseBound<T> {
         const nextValue = _obj[key];
 
         if (nextStorage instanceof Binding) {
-          (nextStorage as Binding).removeBinding(_obj, key as any);
+          (nextStorage as Binding).removeSubscriber(_obj, key as any);
         } else {
           __unbind(nextValue, nextPath);
         }

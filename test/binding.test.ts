@@ -9,12 +9,12 @@ const doubleBind = () => {
 
   const binding = new Binding<string>(false, 'foo');
 
-  binding.addBinding(obj1, 'test');
+  binding.addSubscriber(obj1, 'test');
 
   let threw = false;
 
   try {
-    binding.addBinding(obj1, 'test');
+    binding.addSubscriber(obj1, 'test');
   } catch (e) {
     threw = true;
   }
@@ -35,7 +35,7 @@ export const bindingTests = {
     };
 
     const binding = new Binding<string>(false, 'foo');
-    binding.addBinding(obj1, 'test');
+    binding.addSubscriber(obj1, 'test');
 
     expect(binding.get()).toBe('foo');
 
@@ -50,7 +50,7 @@ export const bindingTests = {
     };
 
     const binding = new Binding<string>(false, 'foo');
-    binding.addBinding(obj1, 'test');
+    binding.addSubscriber(obj1, 'test');
 
     const bound: any = {
       get test() {
@@ -80,7 +80,7 @@ export const bindingTests = {
     };
 
     const binding = new Binding<string>(false, 'foo');
-    binding.addBinding(obj1, 'test');
+    binding.addSubscriber(obj1, 'test');
 
     const bound: any = {
       get test() {
@@ -94,7 +94,7 @@ export const bindingTests = {
 
     expect(bound.test).toBe('foo');
 
-    binding.addBinding(obj2, 'test');
+    binding.addSubscriber(obj2, 'test');
 
     expect(obj2.test).toBe('foo');
 
@@ -126,10 +126,10 @@ export const bindingTests = {
     const binding = new Binding<string>(false, 'foo');
     let amount = 0;
 
-    binding.addSlaveBinding(obj1, 'test');
+    binding.addSlaveSubscriber(obj1, 'test');
     amount++;
 
-    binding.addBinding(obj2, 'test');
+    binding.addSubscriber(obj2, 'test');
     amount++;
 
     expect(binding.subscribers.length).toBe(amount);
@@ -147,10 +147,10 @@ export const bindingTests = {
     const binding = new Binding<string>(false, 'foo');
     let amount = 0;
 
-    binding.addSlaveBinding(obj1, 'test');
+    binding.addSlaveSubscriber(obj1, 'test');
     amount++;
 
-    binding.addBinding(obj2, 'test');
+    binding.addSubscriber(obj2, 'test');
     amount++;
 
     expect(binding.subscribers.length).toBe(amount);
@@ -160,14 +160,14 @@ export const bindingTests = {
     expect(obj1.test).toBe('bar');
     expect(obj2.test).toBe('bar');
 
-    binding.removeBinding(obj2, 'test');
+    binding.removeSubscriber(obj2, 'test');
 
     binding.set('foo');
 
     expect(obj1.test).toBe('foo');
     expect(obj2.test).toBe('bar');
 
-    binding.removeBinding(0);
+    binding.removeSubscriber(0);
 
     binding.set('asd');
 
@@ -187,11 +187,11 @@ export const bindingTests = {
     const binding = new Binding<string>(true, 'bar');
     expect(binding.get()).toBe('bar');
 
-    binding.addMasterBinding(obj1, 'test');
+    binding.addMasterSubscriber(obj1, 'test');
 
     expect(binding.get()).toBe('foo');
 
-    binding.addBinding(obj2, 'test');
+    binding.addSubscriber(obj2, 'test');
 
     expect(binding.get()).toBe('bar');
 
@@ -207,7 +207,7 @@ export const bindingTests = {
   },
 
   'clears bindings': () => {
-    expect(doubleBind().clearBindings().subscribers.length).toBe(0);
+    expect(doubleBind().clearSubscribers().subscribers.length).toBe(0);
   },
 
   'defines plugins': () => {
@@ -238,8 +238,8 @@ export const bindingTests = {
     let realSettersCalled = 0;
     let realGettersCalled = 0;
 
-    binding.addBinding(obj1, 'test'); realSettersCalled++;
-    binding.addBinding(obj2, 'test'); realSettersCalled++;
+    binding.addSubscriber(obj1, 'test'); realSettersCalled++;
+    binding.addSubscriber(obj2, 'test'); realSettersCalled++;
 
     obj2.test = obj1.test; realGettersCalled++; realSettersCalled++;
     obj2.test = 'asd';     realSettersCalled++;
@@ -258,7 +258,7 @@ export const bindingTests = {
     const obj = { test: 'a' };
 
     const binding = new Binding(true, 'bar');
-    binding.removeBinding(obj, 'test'); // Could also throw here!
+    binding.removeSubscriber(obj, 'test'); // Could also throw here!
   }
 };
 

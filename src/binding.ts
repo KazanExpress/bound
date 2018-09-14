@@ -72,18 +72,18 @@ export default class Binding<T = any> {
     });
   }
 
-  public addMasterBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
-  public addMasterBinding(obj: any, prop: string | number) {
-    return this.addBinding(obj, prop, 'master');
+  public addMasterSubscriber<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
+  public addMasterSubscriber(obj: any, prop: string | number) {
+    return this.addSubscriber(obj, prop, 'master');
   }
 
-  public addSlaveBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
-  public addSlaveBinding(obj: any, prop: string | number) {
-    return this.addBinding(obj, prop, 'slave');
+  public addSlaveSubscriber<B extends object>(obj: B, prop: Exclude<keyof B, symbol>);
+  public addSlaveSubscriber(obj: any, prop: string | number) {
+    return this.addSubscriber(obj, prop, 'slave');
   }
 
-  public addBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>, role?: BindingRole);
-  public addBinding(obj: any, prop: string | number, role?: BindingRole) {
+  public addSubscriber<B extends object>(obj: B, prop: Exclude<keyof B, symbol>, role?: BindingRole);
+  public addSubscriber(obj: any, prop: string | number, role?: BindingRole) {
     if (this.twoWay || role === 'master') {
       if (obj[prop] !== undefined) {
         this.set(obj[prop] as any);
@@ -108,9 +108,9 @@ export default class Binding<T = any> {
     return this;
   }
 
-  public removeBinding<B extends object>(obj: B, prop: Exclude<keyof B, symbol>): this;
-  public removeBinding(index: number): this;
-  public removeBinding() {
+  public removeSubscriber<B extends object>(obj: B, prop: Exclude<keyof B, symbol>): this;
+  public removeSubscriber(index: number): this;
+  public removeSubscriber() {
     let index = -1;
 
     if (typeof arguments[0] === 'number') {
@@ -137,7 +137,7 @@ export default class Binding<T = any> {
     return this;
   }
 
-  public clearBindings() {
+  public clearSubscribers() {
     this.subscribers.splice(0);
 
     return this;
