@@ -18,7 +18,6 @@
     "no-construct": true,
     "no-duplicate-super": true,
     "no-eval": true,
-    "no-floating-promises": { "severity": "warning" },
     // "no-implicit-dependencies": true,
     "no-invalid-template-strings": true,
     "no-magic-numbers": true,
