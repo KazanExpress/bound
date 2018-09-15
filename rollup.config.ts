@@ -11,8 +11,8 @@ import json from 'rollup-plugin-json';
 export default {
   input: `src/bound/index.ts`,
   output: [
-    { file: 'dist/bound.umd.js', name: camelCase('bound'), format: 'umd', sourcemap: true },
-    { file: 'dist/bound.es5.js', format: 'es', sourcemap: true },
+    { file: 'dist/bound.umd.js', name: camelCase('bound'), format: 'umd', sourcemap: true, exports: 'named' },
+    { file: 'dist/bound.es5.js', format: 'es', sourcemap: true, exports: 'named' },
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: [],
