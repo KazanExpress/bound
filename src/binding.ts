@@ -134,11 +134,14 @@ export default class Binding<T = any> {
    *
    * @param newValue is the value to set to subscribers' properties.
    */
-  public async notify(newValue: T) {
-    this.subscribers.forEach(async subscriber => {
-      if (subscriber.role !== 'master') { // Set value for each slave
-        subscriber.obj[subscriber.prop] = newValue;
-      }
+  public notify(newValue: T) {
+    return new Promise((resolve, _) => {
+      this.subscribers.forEach(subscriber => {
+        if (subscriber.role !== 'master') { // Set value for each slave
+          subscriber.obj[subscriber.prop] = newValue;
+        }
+      });
+      resolve();
     });
   }
 
