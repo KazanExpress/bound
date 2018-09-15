@@ -43,7 +43,7 @@ export type IBindingPlugin<T = any> = (
     type: 'get' | 'set';
     subscribers: ISubscriber[];
   }
-) => void;
+) => void; // TODO: make interceptors - (value, action) => finalValue as T;
 
 
 /**
