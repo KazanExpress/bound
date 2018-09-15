@@ -253,7 +253,7 @@ export default class Binding<T = any> {
 
 
   /**
-   * Check subscriber objects for reference equality.
+   * Checks subscribers' objects for reference equality.
    */
   public static readonly subscriptionsEqual = (
     src1: ISubscriber | undefined, src2: ISubscriber | undefined

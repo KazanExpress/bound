@@ -11,8 +11,7 @@ export {
 
 export {
   default as Binding,
-  BindingRole,
-  IBindingAction,
+  SubscriberRole,
   IBindingPlugin,
   ISubscriber
 } from '../binding';
