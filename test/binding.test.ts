@@ -254,12 +254,19 @@ export const bindingTests = {
     expect(obj1.test).toBe('asd');
   },
 
+  'assigns binding to unknown props': () => {
+    const obj = { none: 'a' };
+
+    const binding = new Binding(true, 'bar');
+    binding.addSubscriber(obj, 'test' as any); // Could also throw here!
+  },
+
   'handles removal of unknown bindings': () => {
     const obj = { test: 'a' };
 
     const binding = new Binding(true, 'bar');
     binding.removeSubscriber(obj, 'test'); // Could also throw here!
-  }
+  },
 };
 
 describe('Binding', () => {

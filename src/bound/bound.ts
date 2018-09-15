@@ -34,7 +34,7 @@ export default class Bound<T extends object> extends BaseBound<T> {
         this.boundObject[key] = bound.boundObject;
         this.storage[key] = bound.storage;
       } else {
-        const binding = new Binding(false, original[key], (plugins || {})[key]);
+        const binding = new Binding(false, original[key], [(plugins || {})[key]]);
 
         binding.addSubscriber(this.boundObject, key as any);
 

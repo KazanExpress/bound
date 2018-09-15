@@ -63,7 +63,7 @@ export default class Binding<T = any> {
    */
   private callPlugins(type: 'get' | 'set') {
     if (this.plugins) {
-      this.plugins.forEach(plugin => plugin(this.value, Object.freeze({
+      this.plugins.forEach(plugin => plugin && plugin(this.value, Object.freeze({
         type,
         subscribers: this.subscribers
       })));
