@@ -49,9 +49,11 @@ export type IBindingPlugin<T = any> = (
 /**
  * Binding is responsible for binding objects' properties together, storing their values inside and updating subscribers.
  *
+ * It helps to manipulate the bindings on the lowest possible level.
+ *
  * It only binds a SINGLE property at a time!
  *
- * @template T captures a snapshot type of property to bind. Once the class is initialied - only properties of types that extend T are allowed for binding.
+ * @template T captures a type of property to bind. Once the class is initialied - only properties of types that extend T are allowed for binding.
  */
 export default class Binding<T = any> {
   /**

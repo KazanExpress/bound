@@ -7,11 +7,18 @@ export type ISimpleBindingStorage<T extends object> = {
   [key in keyof T]: T[key] extends object ? ISimpleBindingStorage<T[key]> : Binding<T[key]>;
 };
 
+/**
+ * Allows multiple full-object bindings.
+ * Stores bindings and binds objects together, providing the highest possible abstraction level for bindings.
+ *
+ * @extends {BaseBound<T>}
+ * @template T captures a type of proto object for later usage in binding type inference
+ */
 export default class Bound<T extends object> extends BaseBound<T> {
   public storage: ISimpleBindingStorage<T> = {} as any;
 
   /**
-   * Creates an instance of Bound.
+   * Creates an instance of Bound using a proto object.
    * @param proto used as an object prototype for the creation of boundObject and storage. Doesn't become bound itself.
    * @param [plugins] to plug into the binding events.
    */
