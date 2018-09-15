@@ -10,6 +10,11 @@ export type ISimpleBindingStorage<T extends object> = {
 export default class Bound<T extends object> extends BaseBound<T> {
   public storage: ISimpleBindingStorage<T> = {} as any;
 
+  /**
+   * Creates an instance of Bound.
+   * @param proto used as an object prototype for the creation of boundObject and storage. Doesn't become bound itself.
+   * @param [plugins] to plug into the binding events.
+   */
   public constructor(proto: T, plugins?: IBoundPlugin<T>[]) {
     super(proto, plugins);
 
@@ -45,6 +50,13 @@ export default class Bound<T extends object> extends BaseBound<T> {
     }
   }
 
+  /**
+   * Binds an object to all other current subscribers
+   *
+   * @template U used to capture the bound object type. Must extends original template type.
+   * @param obj to bind
+   * @param [twoWay] whether the binding should be two-way
+   */
   public bind<U extends T>(obj: U, twoWay?: boolean) {
     const __bind = (_obj: U, _twoWay: boolean = true, path: string = '') => {
       for (const key in fromPath(this.storage, path)) {
@@ -66,6 +78,11 @@ export default class Bound<T extends object> extends BaseBound<T> {
   }
 
 
+  /**
+   * Unbinds an object and destroys all of its listeners
+   *
+   * @param obj reference of object to be unbound
+   */
   public unbind<U extends T>(obj: U) {
     const __unbind = (_obj: U, path: string = '') => {
       for (const key in fromPath(this.storage, path)) {

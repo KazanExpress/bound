@@ -27,7 +27,7 @@ export default abstract class BaseBound<T extends object> {
   public boundObject = { __bound__: this } as T & { __bound__: BaseBound<T> };
 
   /**
-   * Creates an instance of Bound.
+   * Creates an instance of BaseBound.
    * @param proto used as an object prototype for the creation of boundObject and storage. Doesn't become bound itself.
    * @param [plugins] to plug into the binding events.
    */
