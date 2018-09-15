@@ -19,8 +19,7 @@ export {
 export {
   default as BoundBase,
   IBindingStorage,
-  IBoundAction,
-  IBoundPlugin
+  IBoundPluginMap
 } from './base';
 
 export * from '../config';

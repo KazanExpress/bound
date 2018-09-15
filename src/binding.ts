@@ -47,9 +47,9 @@ export type IBindingPlugin<T = any> = (
 
 
 /**
- * Binding is responsible for binding objects' properties together, storing their values inside and updating subscribers.
+ * Responsible for binding objects' properties together, storing their values inside and updating subscribers.
  *
- * It helps to manipulate the bindings on the lowest possible level.
+ * It helps to manipulate bindings on the lowest possible level.
  *
  * It only binds a SINGLE property at a time!
  *
@@ -153,9 +153,13 @@ export default class Binding<T = any> {
   public addSubscriber(obj: any, prop: string | number, role?: SubscriberRole) {
     if (this.twoWay || role === 'master') {
       if (obj[prop] !== undefined) {
-        this.set(obj[prop] as any);
+        // Bind value for all masters at once
+        this.value = obj[prop];
+
+        // Then notify all slaves about the change
+        this.notify(this.value);
       } else {
-        obj[prop] = this.get();
+        obj[prop] = this.value;
       }
 
       this.bind({ obj, prop, role: 'master' });
@@ -167,7 +171,7 @@ export default class Binding<T = any> {
         enumerable: true
       });
     } else {
-      obj[prop] = this.get();
+      obj[prop] = this.value;
 
       this.bind({ obj, prop, role: 'slave' });
     }

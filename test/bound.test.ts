@@ -1,4 +1,4 @@
-import Bound, { bound } from '../src/bound';
+import Bound, { bound, Binding } from '../src/bound';
 
 describe('Bound', () => {
   it('snapshots the structure correctly', () => {
@@ -136,23 +136,65 @@ describe('Bound', () => {
 
   it('unbinds', () => {
     const obj = {
-      test: 'foo'
+      test: 'foo',
+      inside: {
+        another: 'bar'
+      }
     };
 
     const obj2 = {
-      test: 'foo'
+      test: 'foo',
+      inside: {
+        another: 'bar'
+      }
     };
 
     const bound = new Bound(obj);
     bound.bind(obj);
     bound.bind(obj2);
 
-    obj.test = 'bar';
-    expect(obj2.test).toBe('bar');
+    expect(obj.inside.another).toBe('bar');
+    expect(obj2.inside.another).toBe('bar');
+
+    obj.inside.another = 'foo';
+    expect(obj2.inside.another).toBe('foo');
 
     bound.unbind(obj);
 
-    obj.test = 'foo';
-    expect(obj2.test).toBe('bar');
+    obj.inside.another = 'bar';
+    expect(obj2.inside.another).toBe('foo');
+  });
+
+  // TODO
+  it('plugs in plugins', () => {
+    const obj = {
+      test: 'foo',
+      inside: {
+        another: 'bar'
+      }
+    };
+
+    let pluginWorked = false;
+
+    const bound = new Bound(obj,  {
+      test(value, { type, subscribers }) {
+        if (type === 'set') {
+
+        }
+      },
+      inside: {
+        another(value, { type, subscribers }) {
+          if (type === 'set') {
+
+          }
+        }
+      }
+    });
+
+    bound.bind(obj);
+
+    obj.inside.another = 'foo';
+
+    expect(pluginWorked).toBe(true);
   });
 });

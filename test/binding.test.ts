@@ -238,8 +238,8 @@ export const bindingTests = {
     let realSettersCalled = 0;
     let realGettersCalled = 0;
 
-    binding.addSubscriber(obj1, 'test'); realSettersCalled++;
-    binding.addSubscriber(obj2, 'test'); realSettersCalled++;
+    binding.addSubscriber(obj1, 'test');
+    binding.addSubscriber(obj2, 'test');
 
     obj2.test = obj1.test; realGettersCalled++; realSettersCalled++;
     obj2.test = 'asd';     realSettersCalled++;

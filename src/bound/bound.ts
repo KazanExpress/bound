@@ -1,7 +1,7 @@
-import Binding from '../binding';
+import Binding, { IBindingPlugin } from '../binding';
 import BoundError from '../boundError';
 import { fromPath } from '../util';
-import BaseBound, { IBoundPlugin } from './base';
+import BaseBound, { IBoundPluginMap } from './base';
 
 export type ISimpleBindingStorage<T extends object> = {
   [key in keyof T]: T[key] extends object ? ISimpleBindingStorage<T[key]> : Binding<T[key]>;
@@ -20,39 +20,25 @@ export default class Bound<T extends object> extends BaseBound<T> {
   /**
    * Creates an instance of Bound using a proto object.
    * @param proto used as an object prototype for the creation of boundObject and storage. Doesn't become bound itself.
-   * @param [plugins] to plug into the binding events.
-   */
-  public constructor(proto: T, plugins?: IBoundPlugin<T>[]) {
+   * @param [plugins] to plug into the binding events. Do not work yet.
+   *///TODO: Bound plugins!
+  public constructor(proto: T, plugins?: IBoundPluginMap<T>) {
     super(proto, plugins);
 
-    try {
-      const original = JSON.parse(JSON.stringify(proto));
+    const original = JSON.parse(JSON.stringify(proto));
 
-      for (const key in original) {
-        if (typeof original[key] === 'object') { // If the value is object - then treat it like another bound target
-          const bound = new Bound(original[key] as any);
-          this.boundObject[key] = bound.boundObject;
-          this.storage[key] = bound.storage;
-        } else {
-          const binding = new Binding(
-            true,
-            original[key],
-            plugins ?
-              plugins.map(p => () => p({
-                obj: this.boundObject,
-                prop: key as any,
-                T: undefined
-              }))
-              : plugins
-          );
-          binding.addSubscriber(this.boundObject, key as any);
+    for (const key in original) {
+      if (typeof original[key] === 'object') { // If the value is object - then treat it like another bound target
+        const bound = new Bound(original[key] as any, (plugins || {})[key]);
 
-          this.storage[key] = binding;
-        }
-      }
-    } catch (e) {
-      if (e instanceof RangeError || e instanceof TypeError) {
-        throw new BoundError(`There is a possible circular dependency in your object. Nested exception: ${e}`);
+        this.boundObject[key] = bound.boundObject;
+        this.storage[key] = bound.storage;
+      } else {
+        const binding = new Binding(false, original[key], (plugins || {})[key]);
+
+        binding.addSubscriber(this.boundObject, key as any);
+
+        this.storage[key] = binding;
       }
     }
   }

@@ -1,4 +1,4 @@
-import Binding from '../binding';
+import Binding, { IBindingPlugin } from '../binding';
 import BoundError from '../boundError';
 import config from '../config';
 
@@ -6,12 +6,9 @@ export type IBindingStorage<T extends object> = {
   [key in keyof T]: T[key] extends object ? IBindingStorage<T[key]> : (ProxyHandler<T> | Binding<T[key]>);
 };
 
-export interface IBoundAction<T extends object> {
-  obj; T;
-  prop: keyof T;
-}
-
-export type IBoundPlugin<T extends object> = (action: IBoundAction<T>) => void;
+export type IBoundPluginMap<T extends object> = {
+  [key in keyof T]: T[key] extends object ? IBoundPluginMap<T[key]> : IBindingPlugin<T[key]>;
+};
 
 export default abstract class BaseBound<T extends object> {
   /**
@@ -31,10 +28,10 @@ export default abstract class BaseBound<T extends object> {
    * @param proto used as an object prototype for the creation of boundObject and storage. Doesn't become bound itself.
    * @param [plugins] to plug into the binding events.
    */
-  public constructor(proto: T, public readonly plugins?: IBoundPlugin<T>[]) {
+  public constructor(proto: T, public plugins?: IBoundPluginMap<T>) {
     // Make __bound__ non-enumerable.
-    Object.defineProperty(this, 'boundObject', {
-      value: { __bound__: this },
+    Object.defineProperty(this.boundObject, '__bound__', {
+      value: this,
       enumerable: false,
       writable: false
     });
