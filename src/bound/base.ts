@@ -28,10 +28,10 @@ export default abstract class BaseBound<T extends object> {
 
   /**
    * Creates an instance of Bound.
-   * @param obj used as an object snapshot for the creation of boundObject and storage. Doesn't become bound itself.
+   * @param proto used as an object prototype for the creation of boundObject and storage. Doesn't become bound itself.
    * @param [plugins] to plug into the binding events.
    */
-  public constructor(obj: T, public readonly plugins?: IBoundPlugin<T>[]) {
+  public constructor(proto: T, public readonly plugins?: IBoundPlugin<T>[]) {
     // Make __bound__ non-enumerable.
     Object.defineProperty(this, 'boundObject', {
       value: { __bound__: this },
@@ -39,11 +39,11 @@ export default abstract class BaseBound<T extends object> {
       writable: false
     });
 
-    if (BaseBound.config.debug && typeof obj !== 'object') {
+    if (BaseBound.config.debug && typeof proto !== 'object') {
       throw new BoundError('Only object binds are allowed. For property and pure value bindings use Binding from "bound/binding".');
     }
 
-    if (BaseBound.config.debug && obj instanceof BaseBound || BaseBound.isBound(obj)) {
+    if (BaseBound.config.debug && proto instanceof BaseBound || BaseBound.isBound(proto)) {
       throw new BoundError('Cannot rebind a bound object.');
     }
   }
