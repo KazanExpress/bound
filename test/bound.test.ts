@@ -23,7 +23,7 @@ describe('Bound', () => {
       }
     }
 
-    check(obj, bound.bound);
+    check(obj, bound.boundObject);
   });
 
   it('throws on non-object args', () => {

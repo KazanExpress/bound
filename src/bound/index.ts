@@ -1,7 +1,7 @@
 import Bound from './bound';
 
 export function bound<T extends object>(target: T): T {
-  return new Bound(target).bound;
+  return new Bound(target).boundObject;
 }
 
 export {

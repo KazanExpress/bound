@@ -15,7 +15,7 @@ export type IBoundPlugin<T extends object> = (action: IBoundAction<T>) => void;
 
 export default abstract class BaseBound<T extends object> {
   public storage: IBindingStorage<T> = {} as any;
-  public bound = { __bound__: this } as T & { __bound__: BaseBound<T> };
+  public boundObject = { __bound__: this } as T & { __bound__: BaseBound<T> };
 
   public constructor(obj: T, public readonly plugins?: IBoundPlugin<T>[]) {
     if (BaseBound.config.debug && typeof obj !== 'object') {

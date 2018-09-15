@@ -19,7 +19,7 @@ export default class Bound<T extends object> extends BaseBound<T> {
       for (const key in original) {
         if (typeof original[key] === 'object') { // If the value is object - then treat it like another bound target
           const bound = new Bound(original[key] as any);
-          this.bound[key] = bound.bound;
+          this.boundObject[key] = bound.boundObject;
           this.storage[key] = bound.storage;
         } else {
           const binding = new Binding(
@@ -27,13 +27,13 @@ export default class Bound<T extends object> extends BaseBound<T> {
             original[key],
             plugins ?
               plugins.map(p => () => p({
-                obj: this.bound,
+                obj: this.boundObject,
                 prop: key as any,
                 T: undefined
               }))
               : plugins
           );
-          binding.addSubscriber(this.bound, key as any);
+          binding.addSubscriber(this.boundObject, key as any);
 
           this.storage[key] = binding;
         }
