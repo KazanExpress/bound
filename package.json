@@ -2,7 +2,26 @@
   "name": "simple-bound",
   "version": "0.0.0",
   "description": "",
-  "keywords": [],
+  "keywords": [
+    "binding",
+    "bindings",
+    "two-way-databinding",
+    "two-way-bindings",
+    "two-way-data-binding",
+    "two-way-synchronization",
+    "bound",
+    "javascript",
+    "framework",
+    "typescript",
+    "typescript-library",
+    "types",
+    "reactive",
+    "customizable",
+    "decent",
+    "cool",
+    "new",
+    "work-in-progress"
+  ],
   "main": "dist/bound.umd.js",
   "module": "dist/bound.es5.js",
   "typings": "dist/types/bound.d.ts",
@@ -12,7 +31,7 @@
   "author": "raiondesu <a.raiondesu@gmail.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/KazanExpress/bound"
   },
   "license": "MIT",
   "engines": {
