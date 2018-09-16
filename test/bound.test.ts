@@ -1,4 +1,4 @@
-import Bound, { bound, BoundError } from '../src/bound';
+import Bound, { bound, Binding } from '../src/bound';
 
 describe('Bound', () => {
   it('snapshots the structure correctly', () => {
@@ -23,7 +23,7 @@ describe('Bound', () => {
       }
     }
 
-    check(obj, bound.bound);
+    check(obj, bound.boundObject);
   });
 
   it('throws on non-object args', () => {
@@ -112,7 +112,9 @@ describe('Bound', () => {
   });
 
   it('assigns bound as function', () => {
-    expect(bound({})).toHaveProperty('__bound__');
+    const _bound = bound({});
+    expect(_bound).toHaveProperty('__bound__');
+    expect(Bound.isBound(_bound)).toBe(true);
   });
 
   it('throws on circular dependencies', () => {
@@ -130,5 +132,69 @@ describe('Bound', () => {
     }
 
     expect(threw).toBe(true);
+  });
+
+  it('unbinds', () => {
+    const obj = {
+      test: 'foo',
+      inside: {
+        another: 'bar'
+      }
+    };
+
+    const obj2 = {
+      test: 'foo',
+      inside: {
+        another: 'bar'
+      }
+    };
+
+    const bound = new Bound(obj);
+    bound.bind(obj);
+    bound.bind(obj2);
+
+    expect(obj.inside.another).toBe('bar');
+    expect(obj2.inside.another).toBe('bar');
+
+    obj.inside.another = 'foo';
+    expect(obj2.inside.another).toBe('foo');
+
+    bound.unbind(obj);
+
+    obj.inside.another = 'bar';
+    expect(obj2.inside.another).toBe('foo');
+  });
+
+  // TODO
+  it('plugs in plugins', () => {
+    const obj = {
+      test: 'foo',
+      inside: {
+        another: 'bar'
+      }
+    };
+
+    let pluginWorked = false;
+
+    const bound = new Bound(obj,  {
+      test(value, { type, subscribers }) {
+        if (type === 'set') {
+
+        }
+      },
+      inside: {
+        another(value, { type, subscribers }) {
+          if (type === 'set') {
+
+          }
+        }
+      }
+    });
+
+    bound.bind(obj);
+
+    obj.inside.another = 'foo';
+
+    expect(pluginWorked).toBe(false); // Because plugins don't work yet...
   });
 });

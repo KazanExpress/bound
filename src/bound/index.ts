@@ -1,18 +1,18 @@
-import SimpleBound from './simple';
+import Bound from './bound';
 
+// TODO: account for a class decorator case
 export function bound<T extends object>(target: T): T {
-  return new SimpleBound(target).bound;
+  return new Bound(target).boundObject;
 }
 
 export {
   default,
   ISimpleBindingStorage
-} from './simple';
+} from './bound';
 
 export {
   default as Binding,
-  BindingRole,
-  IBindingAction,
+  SubscriberRole,
   IBindingPlugin,
   ISubscriber
 } from '../binding';
@@ -20,10 +20,8 @@ export {
 export {
   default as BoundBase,
   IBindingStorage,
-  IBoundAction,
-  IBoundPlugin
+  IBoundPluginMap
 } from './base';
 
-export * from '../config';
 export * from '../util';
 export { default as BoundError } from '../boundError';
