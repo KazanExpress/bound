@@ -150,9 +150,9 @@ obj2.test = 'bar';   // obj.test === 'foo' && binding.get() === 'foo'
 // Master: updates all subscribers
 obj.test = 'baz';    // obj2.test === 'baz' && binding.get() === 'baz'
 
-binding.removeBinding(obj2); // By object reference
-binding.removeBinding(0); // By index
-binding.clearBindings();
+binding.removeSubscriber(obj2); // By object reference
+binding.removeSubscriber(0); // By index
+binding.clearSubscribers();
 ```
 
 <!-- </details> -->
