@@ -54,12 +54,12 @@ yarn add simple-bound
 
 **ES**
 ```js
-import Bound from 'bound'
+import Bound from 'simple-bound'
 ```
 
 **CommonJS**
 ```js
-const Bound = require('bound').default;
+const Bound = require('simple-bound').default;
 ```
 
 **UNPKG**
@@ -106,7 +106,7 @@ console.log(obj2.prop);
 import Bound, {
   bound,
   Binding
-} from 'bound';
+} from 'simple-bound';
 
 let obj = {
   test: 'foo';
