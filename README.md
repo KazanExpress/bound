@@ -1,4 +1,4 @@
-<center>
+<div style="text-align: center">
 <h1>simple-bound</h1>
 
 <big>A simple data binding library for node and browser with no dependencies.</big>
@@ -8,7 +8,7 @@
 [![](https://img.shields.io/badge/github-repo-lightgray.svg?style=flat-square)](https://github.com/KazanExpress/bound)
 [![](https://img.shields.io/badge/dependencies-none-blue.svg?style=flat-square)](https://www.npmjs.com/package/simple-bound?activeTab=dependencies)
 [![npm](https://img.shields.io/npm/dt/simple-bound.svg?style=flat-square)](https://www.npmjs.com/package/simple-bound)
-</center>
+</div>
 
 <br/>
 
