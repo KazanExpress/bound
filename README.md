@@ -106,7 +106,7 @@ import Bound from 'simple-bound'
 
 // You also can import separate modules:
 import Binding from 'simple-bound/dist/lib/binding'
-import BaseBound from 'simple-bound/dist/lib/base'
+import BaseBound from 'simple-bound/dist/lib/bound/base'
 ```
 
 **CommonJS**
@@ -191,7 +191,7 @@ obj.test = 'new value'; // Notification is sent to obj2, updating its `test` pro
 
 ### Object relationships
 
-The ['Bound`](#bound) class groups relationships together in a form of an object to subscribe all of their fields to changes.
+The [`Bound`](#bound) class groups relationships together in a form of an object to subscribe all of their fields to changes.
 
 Essentially, it maps all bound object's properties to their [binding relationships](#binding) using internal [storage](#bound-instance) that contains these relationships in a map identical to the object itself.
 
@@ -296,24 +296,44 @@ const instance = new Binding(false, 'value');
 ```
 
 ##### Properties
-> ```js
-> instance.subscribers
+> ```ts
+> instance.subscribers: Array<ISubscriber>
 > ```
+> 
 > Contains an array of subscribers in the following format:
 > ```js
 > {
 >   obj: subscriberObject,
->   prop: 'objectPropKey',
+>   prop: 'subscriberObjectPropertyKey',
 >   role: 'slave' | 'master' | undefined
 > }
 > ```
 
-twoWay      | `boolean` | (READ-ONLY) Defines if a binding should always be 2-way and ignore roles.
-value       | `any`     | (PROTECTED) Stores the value of the binding relationship for "masters".
-plugins     | `Array`   | An array of plugins to use.
+> ```ts
+> instance.twoWay: boolean
+> ```
+> READ-ONLY
+> 
+> Defines if a binding should always be 2-way and ignore roles.
 
+> ```js
+> instance.value
+> ```
+> PROTECTED
+>
+> Stores the value of the binding relationship for "masters".
+
+> ```ts
+> instance.plugins: Array<IBindingPlugin> 
+> ```
+>
+> An array of plugins to use.
 
 ##### Methods
+> ```js
+> instance.get()
+> ```
+> A generic get function that is applied to subscribers.
 
 
 #### Binding static fields
