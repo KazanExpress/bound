@@ -14,11 +14,11 @@ export default class ProxyBound<T extends object> extends BaseBound<T> {
     throw new BoundError('Class not implemented.');
   }
 
-  public bind<U extends T>(obj: U, twoWay?: boolean) {
+  public bind<U extends T>(obj: U, twoWay?: boolean): this {
     throw new BoundError('Method not implemented.');
   }
 
-  public unbind<U extends T>(obj: U) {
+  public unbind<U extends T>(obj: U): U {
     throw new BoundError('Method not implemented.');
   }
 }

@@ -199,6 +199,10 @@ Essentially, it maps all bound object's properties to their [binding relationshi
 
 ## API
 
+API can seem a bit tricky at first, because the concept of data-binding does not imply any uniformal way of doing it.
+
+We recommend checking out an [interactive playground at RunKit](https://npm.runkit.com/simple-bound) for better intuitive understanding of how things work.
+
 ### TLDR
 
 <details><summary>Click to expand</summary>
@@ -271,6 +275,8 @@ binding.clearSubscribers();
 
 </details>
 
+---
+
 ### Binding
 > Stores and updates single property bindings.
 
@@ -282,7 +288,7 @@ It helps to manipulate bindings on the lowest possible level.
 Creation of a `Binding` instance is equivalent to the creation of a new data-binding relationship.
 Each newly added member "subscribes" to notifications about changes in the relationship's value.
 
-#### Binding Constructor
+#### Binding constructor
 ```js
 new Binding(/* is always two-way */ false, /* default initial value */ 'value')
 ```
@@ -292,7 +298,7 @@ argument     | type      | description
 twoWay       | `boolean` | Determines if all the bindings associated with the instance should be two-way
 defaultValue | `any`     | Sets the default value for subscribers that do not have a value.
 
-#### Binding Instance
+#### Binding instance
 ```js
 const instance = new Binding(false, 'value');
 ```
@@ -385,9 +391,66 @@ const instance = new Binding(false, 'value');
 > ```
 > Checks subscribers' objects for reference and prop-name equality.
 
+---
+
+### Bound
+> Allows multiple full-object bindings.
+
+Stores bindings and binds objects together, providing the highest possible abstraction level for bindings.
+
+#### Bound constructor
+```js
+new Bound({ property: 'value' })
+```
+
+Creates an instance of Bound using a proto object.
+
+#### Bound instance
+```js
+const bound = new Binding({ property: 'value' });
+```
+
+##### Bound properties
+> ```ts
+> bound.storage: IBindingStorage
+> ```
+> Stores bindings in a structure that is identical to the binding-prototype-object.
+
+> ```js
+> bound.boundObject
+> ```
+> A bound object created from a constuctor's snapshot object.
+> Contains an instance of the Bound class itself by the `__bound__` key.
+
+##### Bound methods
+> ```js
+> bound.bind(obj, /* two-way? */ true)
+> ```
+> Binds an object to all other current subscribers.
+> If the second argument is false
+
+> ```js
+> bound.unbind(/* object reference */ obj)
+> ```
+> Unbinds an object and destroys all of its listeners
+
+##### Bound static fields
+> ```js
+> Bound.config === {
+>   debug: false
+> }
+> ```
+> Global binding config. Changes affect all instances.
+
+> ```js
+> Bound.isBound(/* object reference */ obj)
+> ```
+> Checks whether an object has already been bound.
+
+---
+
 ## Coming Soon
 
-  - Full documentation
   - Plugins
   - Event listeners
   - Interceptors and pipes (maybe?)

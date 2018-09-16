@@ -151,7 +151,7 @@ describe('Bound', () => {
 
     const bound = new Bound(obj);
     bound.bind(obj);
-    bound.bind(obj2);
+    bound.bind(obj2, false);
 
     expect(obj.inside.another).toBe('bar');
     expect(obj2.inside.another).toBe('bar');
@@ -196,5 +196,13 @@ describe('Bound', () => {
     obj.inside.another = 'foo';
 
     expect(pluginWorked).toBe(false); // Because plugins don't work yet...
+  });
+
+  it('Throws', () => {
+    try {
+      new Bound({}).bindAndMap({}, {});
+    } catch (e) {
+      expect(e.message).toBe('[bound]: Method not implemented.');
+    }
   });
 });

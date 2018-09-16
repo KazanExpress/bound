@@ -31,7 +31,7 @@
     "no-unsafe-finally": true,
     "no-var-requires": true,
     "number-literal-format": true,
-    "prefer-function-over-method": { "severity": "warning" },
+    // "prefer-function-over-method": { "severity": "warning" },
     "prefer-object-spread": true,
     "prefer-template": true,
     // "promise-function-async": true,
