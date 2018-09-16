@@ -1,4 +1,3 @@
-<center>
 <p align="justify">
 <h1>simple-bound</h1>
 
@@ -10,8 +9,6 @@
 [![](https://img.shields.io/badge/dependencies-none-blue.svg?style=flat-square)](https://www.npmjs.com/package/simple-bound?activeTab=dependencies)
 [![npm](https://img.shields.io/npm/dt/simple-bound.svg?style=flat-square)](https://www.npmjs.com/package/simple-bound)
 </p>
-</center>
-
 <br/>
 
 ```bash
