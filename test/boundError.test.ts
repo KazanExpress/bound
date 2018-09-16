@@ -5,6 +5,7 @@ describe('BoundError', () => {
     try {
       throw new BoundError();
     } catch (e) {
+      // Doesn't seem to work in node...
       // expect(e instanceof BoundError).toBe(true);
     }
   });
