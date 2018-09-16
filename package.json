@@ -1,6 +1,6 @@
 {
   "name": "simple-bound",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A simple and customizable reactive data-binding library.",
   "keywords": [
     "binding",
@@ -109,7 +109,7 @@
     "rollup-plugin-typescript2": "^0.13.0",
     "ts-jest": "^22.0.0",
     "ts-node": "^6.0.0",
-    "tslint": "^5.8.0",
+    "tslint": "^5.11.0",
     "typescript": "^3.0.1"
   }
 }
