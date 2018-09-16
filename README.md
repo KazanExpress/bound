@@ -277,6 +277,8 @@ binding.clearSubscribers();
 Can be thought of as a primitive in terms of data-binding.
 Its main responsibility is to manage single-property bindings, hence the name - `Binding` as in "one, single binding".
 
+It helps to manipulate bindings on the lowest possible level.
+
 Creation of a `Binding` instance is equivalent to the creation of a new data-binding relationship.
 Each newly added member "subscribes" to notifications about changes in the relationship's value.
 
@@ -334,10 +336,54 @@ const instance = new Binding(false, 'value');
 > instance.get()
 > ```
 > A generic get function that is applied to subscribers.
+> Gets `instance.value`.
+
+> ```js
+> intance.set('new value')
+> ```
+> A generic set function that is applied to subscribers.
+> Sets `instance.value` and notifies subscribers.
+
+> ```js
+> instance.notify('value')
+> ```
+> Asynchroniously notifies slave subscribers about the value change.
+
+> ```js
+> instance.addSubscriber(obj, 'propName', 'master' | 'slave' | undefined)
+> ```
+> Binds an object prop and subscribes it to master-subscribers' changes.
+
+> ```js
+> instance.addMasterSubscriber(obj, 'propName')
+> instance.addSlaveSubscriber(obj, 'propName')
+> ```
+> Binds an object prop as a master or slave and subscribes it to master-subscribers' changes
+
+> ```js
+> instance.removeSubscriber(obj, 'propName') // by reference
+> instance.removeSubscriber(2) // by index
+> ```
+> Unbinds an object's property and unsubscribes it from changes.
+
+> ```js
+> instance.clearSubscribers()
+> ```
+> Clears all subscribers from the binding.
 
 
 #### Binding static fields
+> ```js
+> Binding.config === {
+>   debug: false
+> }
+> ```
+> Global binding config. Changes affect all instances.
 
+> ```js
+> Binding.subscriptionsEqual(subscriber1, subscriber2)
+> ```
+> Checks subscribers' objects for reference and prop-name equality.
 
 ## Coming Soon
 
