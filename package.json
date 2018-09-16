@@ -1,6 +1,6 @@
 {
   "name": "simple-bound",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A simple and customizable reactive data-binding framework.",
   "keywords": [
     "binding",
