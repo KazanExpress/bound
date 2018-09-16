@@ -54,8 +54,7 @@ export default abstract class BaseBound<T extends object> {
     // Make __bound__ non-enumerable.
     Object.defineProperty(this.boundObject, '__bound__', {
       value: this,
-      enumerable: false,
-      writable: false
+      writable: true
     });
 
     if (BaseBound.config.debug && typeof proto !== 'object') {
@@ -74,7 +73,7 @@ export default abstract class BaseBound<T extends object> {
    * @param obj to bind
    * @param [twoWay] whether the binding should be two-way
    */
-  public abstract bind<U extends T>(obj: U, twoWay?: boolean);
+  public abstract bind<U extends T>(obj: U, twoWay?: boolean): this;
 
   /**
    * [NOT_IMPLEMENTED] Maps the object of a different shape to the original binding object
@@ -82,7 +81,7 @@ export default abstract class BaseBound<T extends object> {
    * @param mapToOriginal a map for target object's keys relative to the original binding object type
    * @param twoWay whether the binding should be two-way
    */
-  public bindAndMap<U>(obj: U, mapToOriginal: BindObjectMap<T>, twoWay?: boolean) {
+  public bindAndMap<U>(obj: U, mapToOriginal: BindObjectMap<T>, twoWay?: boolean): this {
     throw new BoundError('Method not implemented');
   }
 
@@ -91,7 +90,7 @@ export default abstract class BaseBound<T extends object> {
    *
    * @param obj reference of object to be unbound
    */
-  public abstract unbind<U extends T>(obj: U);
+  public abstract unbind<U extends T>(obj: U): U;
 
   /**
    * Global binding config. Changes affect all instances.

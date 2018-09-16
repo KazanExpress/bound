@@ -52,6 +52,11 @@ export default class Bound<T extends object> extends BaseBound<T> {
    *///TODO: rework this function. It's a mess.
   public bind<U extends T>(obj: U, twoWay?: boolean) {
     const __bind = (_obj: U, _twoWay: boolean = true, path: string = '') => {
+      Object.defineProperty(_obj, '__bound__', {
+        value: fromPath(this.boundObject, path).__bound__,
+        writable: true
+      });
+
       for (const key in fromPath(this.storage, path)) {
         const nextPath = !path ? key : `${path}.${key}`;
         const nextStorage = fromPath(this.storage, nextPath);
@@ -67,7 +72,7 @@ export default class Bound<T extends object> extends BaseBound<T> {
 
     __bind(obj, twoWay);
 
-    (obj as any).__bound__ = this;
+    return this;
   }
 
 
@@ -78,6 +83,8 @@ export default class Bound<T extends object> extends BaseBound<T> {
    */
   public unbind<U extends T>(obj: U) {
     const __unbind = (_obj: U, path: string = '') => {
+      (_obj as any).__bound__ = undefined;
+
       for (const key in fromPath(this.storage, path)) {
         const nextPath = !path ? key : `${path}.${key}`;
         const nextStorage = fromPath(this.storage, nextPath);
@@ -86,11 +93,10 @@ export default class Bound<T extends object> extends BaseBound<T> {
         if (nextStorage instanceof Binding) {
           (nextStorage as Binding).removeSubscriber(_obj, key as any);
         } else {
-          __unbind(nextValue, nextPath);
+          _obj[key] = __unbind(nextValue, nextPath);
         }
       }
 
-      delete (_obj as any).__bound__;
 
       return JSON.parse(JSON.stringify(_obj));
     };
