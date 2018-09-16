@@ -197,4 +197,12 @@ describe('Bound', () => {
 
     expect(pluginWorked).toBe(false); // Because plugins don't work yet...
   });
+
+  it('Throws', () => {
+    try {
+      new Bound({}).bindAndMap({}, {});
+    } catch (e) {
+      expect(e.message).toBe('[bound]: Method not implemented.');
+    }
+  });
 });
