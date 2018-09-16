@@ -151,7 +151,7 @@ describe('Bound', () => {
 
     const bound = new Bound(obj);
     bound.bind(obj);
-    bound.bind(obj2);
+    bound.bind(obj2, false);
 
     expect(obj.inside.another).toBe('bar');
     expect(obj2.inside.another).toBe('bar');
