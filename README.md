@@ -46,7 +46,7 @@ Bound is a small and customizable library that allows precise data binding manag
 
 But what is data binding?
 
-[Data binding](https://en.wikipedia.org/wiki/Data_binding) is a general technique that binds data sources from two types of sources (`provider` and `consumer`, `master` and `slave`) and syncronizes them.
+[Data binding](https://en.wikipedia.org/wiki/Data_binding) is a general technique that binds data sources of two general types (`provider` and `consumer`, `master` and `slave`) and syncronizes them.
 
 For example, let's imagine two objects bound together using this technique:
 
