@@ -86,7 +86,7 @@ export default class Binding<T = any> {
   }
 
   /**
-   * Stores subscribers on change-events for further manipulations.
+   * Stores subscribers for further manipulations.
    */
   public readonly subscribers: ISubscriber[] = [];
 

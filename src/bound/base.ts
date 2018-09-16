@@ -10,6 +10,28 @@ export type IBoundPluginMap<T extends object> = {
   [key in keyof T]: T[key] extends object ? IBoundPluginMap<T[key]> : IBindingPlugin<T[key]>;
 };
 
+/**
+  const BoundInstance = new Bound({
+    prop: 'bar',
+    nested: {
+      prop: 'foo'
+    }
+  });
+
+  BoundInstance.bindAndMap({
+    test: 'prop',
+    nestedProp: 'value'
+  }, {
+    prop: 'test',
+    nested: {
+      prop: 'nestedProp'
+    }
+  });
+ */
+export type BindObjectMap<T extends object> = {
+  [key in keyof T]: T[key] extends object ? BindObjectMap<T[key]> : string
+};
+
 export default abstract class BaseBound<T extends object> {
   /**
    * Stores bindings in a structure that is identical to the binding-prototype-object.
@@ -53,6 +75,16 @@ export default abstract class BaseBound<T extends object> {
    * @param [twoWay] whether the binding should be two-way
    */
   public abstract bind<U extends T>(obj: U, twoWay?: boolean);
+
+  /**
+   * [NOT_IMPLEMENTED] Maps the object of a different shape to the original binding object
+   * @param obj target object to bind
+   * @param mapToOriginal a map for target object's keys relative to the original binding object type
+   * @param twoWay whether the binding should be two-way
+   */
+  public bindAndMap<U>(obj: U, mapToOriginal: BindObjectMap<T>, twoWay?: boolean) {
+    throw new BoundError('Method not implemented');
+  }
 
   /**
    * Unbinds an object and destroys all of its listeners

@@ -267,6 +267,20 @@ export const bindingTests = {
     const binding = new Binding(true, 'bar');
     binding.removeSubscriber(obj, 'test'); // Could also throw here!
   },
+
+  'works with external data': () => {
+    const dataSource = require('./externalDataSource');
+    const obj = { data: 'bar' };
+
+    const binding = new Binding(false, 'bar');
+    binding.addSlaveSubscriber(dataSource, 'data');
+    binding.addMasterSubscriber(obj, 'data');
+
+    expect(dataSource.data).toBe('bar');
+
+    obj.data = 'foo';
+    expect(dataSource.data).toBe('foo');
+  }
 };
 
 describe('Binding', () => {
