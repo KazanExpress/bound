@@ -20,6 +20,7 @@ Many JavaScript libraries and frameworks use some form of data-binding under the
 
 `Bound` is currently in the alpha state, there might be ~~some~~ a lot of bugs. Feel free to report them in the [issues section](https://github.com/KazanExpress/bound/issues/new). 🙂
 
+---
 
 ## Table of contents
 
@@ -39,6 +40,7 @@ Many JavaScript libraries and frameworks use some form of data-binding under the
     - [Static fields](#bound-static-fields)
 - [Coming Soon](#coming-soon)
 
+---
 
 ## What is Bound?
 
@@ -84,6 +86,8 @@ In one-way data-binding there exist two types of binding subscribers:
 
 `Bound` allows to handle both one-way and two-way data bindings with ease.
 
+---
+
 ## Installation
 
 ### Install as dependency
@@ -99,6 +103,10 @@ yarn add simple-bound
 **ES**
 ```js
 import Bound from 'simple-bound'
+
+// You also can import separate modules:
+import Binding from 'simple-bound/dist/lib/binding'
+import BaseBound from 'simple-bound/dist/lib/base'
 ```
 
 **CommonJS**
@@ -108,8 +116,14 @@ const Bound = require('simple-bound').default;
 
 **Script tag**
 ```html
-<script src="https://unpkg.com/simple-bound" onload="window.Bound = bound.default"></script>
+<script src="https://unpkg.com/simple-bound" onload="bound.Bound = bound.default"></script>
+
+<script>
+  const binding = new bound.Binding(false, 'value');
+</script>
 ```
+
+---
 
 ## Simple example
 
@@ -139,6 +153,7 @@ console.log(obj2.prop);
 // Magic!
 ```
 
+---
 
 ## How it works
 
@@ -179,6 +194,8 @@ obj.test = 'new value'; // Notification is sent to obj2, updating its `test` pro
 The ['Bound`](#bound) class groups relationships together in a form of an object to subscribe all of their fields to changes.
 
 Essentially, it maps all bound object's properties to their [binding relationships](#binding) using internal [storage](#bound-instance) that contains these relationships in a map identical to the object itself.
+
+---
 
 ## API
 
@@ -272,6 +289,35 @@ argument     | type      | description
 -------------|-----------|--------------
 twoWay       | `boolean` | Determines if all the bindings associated with the instance should be two-way
 defaultValue | `any`     | Sets the default value for subscribers that do not have a value.
+
+#### Binding Instance
+```js
+const instance = new Binding(false, 'value');
+```
+
+##### Properties
+> ```js
+> instance.subscribers
+> ```
+> Contains an array of subscribers in the following format:
+> ```js
+> {
+>   obj: subscriberObject,
+>   prop: 'objectPropKey',
+>   role: 'slave' | 'master' | undefined
+> }
+> ```
+
+twoWay      | `boolean` | (READ-ONLY) Defines if a binding should always be 2-way and ignore roles.
+value       | `any`     | (PROTECTED) Stores the value of the binding relationship for "masters".
+plugins     | `Array`   | An array of plugins to use.
+
+
+##### Methods
+
+
+#### Binding static fields
+
 
 ## Coming Soon
 
