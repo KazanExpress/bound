@@ -82,7 +82,7 @@ export default abstract class BaseBound<T extends object> {
    * @param twoWay whether the binding should be two-way
    */
   public bindAndMap<U>(obj: U, mapToOriginal: BindObjectMap<T>, twoWay?: boolean): this {
-    throw new BoundError('Method not implemented');
+    throw new BoundError('Method not implemented.');
   }
 
   /**
