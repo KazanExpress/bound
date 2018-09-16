@@ -34,7 +34,7 @@
     "prefer-function-over-method": { "severity": "warning" },
     "prefer-object-spread": true,
     "prefer-template": true,
-    "promise-function-async": true,
+    // "promise-function-async": true,
     "quotemark": { "options": "single" },
     "return-undefined": true,
     "space-before-function-paren": [true, { "anonymous": "always", "named": "never", "asyncArrow": "always" }],

@@ -1,5 +1,6 @@
 import Bound from './bound';
 
+// TODO: account for a class decorator case
 export function bound<T extends object>(target: T): T {
   return new Bound(target).boundObject;
 }
@@ -22,6 +23,5 @@ export {
   IBoundPluginMap
 } from './base';
 
-export * from '../config';
 export * from '../util';
 export { default as BoundError } from '../boundError';
