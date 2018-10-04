@@ -1,5 +1,5 @@
+# simple-bound
 <p align="center">
-  <h1>simple-bound</h1>
 
   <big>A simple data binding library for node and browser with no dependencies.</big>
 

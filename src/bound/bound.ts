@@ -50,7 +50,7 @@ export default class Bound<T extends object> extends BaseBound<T> {
    * @param obj to bind
    * @param [twoWay] whether the binding should be two-way
    *///TODO: rework this function. It's a mess.
-  public bind<U extends T>(obj: U, twoWay?: boolean) {
+  public bind<U extends T>(obj: U, twoWay: boolean = true) {
     const __bind = (_obj: U, _twoWay: boolean = true, path: string = '') => {
       Object.defineProperty(_obj, '__bound__', {
         value: fromPath(this.boundObject, path).__bound__,
