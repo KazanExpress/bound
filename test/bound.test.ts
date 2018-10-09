@@ -1,4 +1,4 @@
-import Bound, { bound, Binding } from '../src/bound';
+import Bound, { bound } from '../src/bound';
 
 describe('Bound', () => {
   it('snapshots the structure correctly', () => {
